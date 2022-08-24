@@ -1,0 +1,334 @@
+<head>
+<title>Pokedex Completion</title>
+
+<script>
+		//Codigo para obtener parametros de URL
+		function getParametro(variable) {
+		    var query = window.location.search.substring(1);
+		    var vars = query.split('&');
+		    for (var i = 0; i < vars.length; i++) {
+		        var pair = vars[i].split('=');
+		        if (decodeURIComponent(pair[0]) == variable) {
+		            return decodeURIComponent(pair[1]);
+		        }
+		    }
+		    console.log('No se encontro el parametro %s', variable);
+		}
+		
+		function hayParametro(variable) {
+		    var query = window.location.search.substring(1);
+		    var vars = query.split('&');
+		    for (var i = 0; i < vars.length; i++) {
+		        var pair = vars[i].split('=');
+		        if (decodeURIComponent(pair[0]) == variable) {
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+</script>
+
+</head>
+
+<body bgcolor=#181820 text="#FFFFFF" link="#C0C0C0" vlink="#C0C0C0" alink="#00FF00" >
+<style>
+div
+{
+	font-family: Verdana, sans-serif;
+	font-size: 13px;
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+p
+{
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+#big
+{
+    font: bold 24px Trebuchet MS,sans-serif;
+}
+</style>
+<script>
+var pokemon_list = "111111111101111101110111111011111111111111111110100111100001001100100011011000001110001011111101110110111110111011110110000001001110111111111111111111111101100001010011011110011011111101111011011111011111001110110110011001111101101111101111100010111110011111111111001001100000100111010100000111010111111001110111111101100100001111110111111100100101110111111011010000110111000000111111110100110001001100111110000001111111011101111100000000101011111000001101110110000101111101101110101100111011111011101010011011101100000110100011001100101001001010011110100111001110101111110010001001111110000101110000100111111111001000011000001100111111100000110111111111111110111111101100111100101001111000100111111101010111011101111111100011010100000001000001001010100010000001100000001000000000010000000000010000000000000000001100000000000010001000001000000101000010001000100000000010001000000";
+var pokemon_amount = 484;
+var googleworks = false;
+
+var pokemon_names = ["missingno", "Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard", "Squirtle", "Wartortle", "Blastoise", "Caterpie", "Metapod", "Butterfree", "Weedle", "Kakuna", "Beedrill", "Pidgey", "Pidgeotto", "Pidgeot", "Rattata", "Raticate", "Spearow", "Fearow", "Ekans", "Arbok", "Pikachu", "Raichu", "Sandshrew", "Sandslash", "Nidoran female", "Nidorina", "Nidoqueen", "Nidoran male", "Nidorino", "Nidoking", "Clefairy", "Clefable", "Vulpix", "Ninetales", "Jigglypuff", "Wigglytuff", "Zubat", "Golbat", "Oddish", "Gloom", "Vileplume", "Paras", "Parasect", "Venonat", "Venomoth", "Diglett", "Dugtrio", "Meowth", "Persian", "Psyduck", "Golduck", "Mankey", "Primeape", "Growlithe", "Arcanine", "Poliwag", "Poliwhirl", "Poliwrath", "Abra", "Kadabra", "Alakazam", "Machop", "Machoke", "Machamp", "Bellsprout", "Weepinbell", "Victreebel", "Tentacool", "Tentacruel", "Geodude", "Graveler", "Golem", "Ponyta", "Rapidash", "Slowpoke", "Slowbro", "Magnemite", "Magneton", "Farfetchd", "Doduo", "Dodrio", "Seel", "Dewgong", "Grimer", "Muk", "Shellder", "Cloyster", "Gastly", "Haunter", "Gengar", "Onix", "Drowzee", "Hypno", "Krabby", "Kingler", "Voltorb", "Electrode", "Exeggcute", "Exeggutor", "Cubone", "Marowak", "Hitmonlee", "Hitmonchan", "Lickitung", "Koffing", "Weezing", "Rhyhorn", "Rhydon", "Chansey", "Tangela", "Kangaskhan", "Horsea", "Seadra", "Goldeen", "Seaking", "Staryu", "Starmie", "mrmime", "Scyther", "Jynx", "Electabuzz", "Magmar", "Pinsir", "Tauros", "Magikarp", "Gyarados", "Lapras", "Ditto", "Eevee", "Vaporeon", "Jolteon", "Flareon", "Porygon", "Omanyte", "Omastar", "Kabuto", "Kabutops", "Aerodactyl", "Snorlax", "Articuno", "Zapdos", "Moltres", "Dratini", "Dragonair", "Dragonite", "Mewtwo", "Mew", "Chikorita", "Bayleef", "Meganium", "Cyndaquil", "Quilava", "Typhlosion", "Totodile", "Croconaw", "Feraligatr", "Sentret", "Furret", "Hoothoot", "Noctowl", "Ledyba", "Ledian", "Spinarak", "Ariados", "Crobat", "Chinchou", "Lanturn", "Pichu", "Cleffa", "Igglybuff", "Togepi", "Togetic", "Natu", "Xatu", "Mareep", "Flaaffy", "Ampharos", "Bellossom", "Marill", "Azumarill", "Sudowoodo", "Politoed", "Hoppip", "Skiploom", "Jumpluff", "Aipom", "Sunkern", "Sunflora", "Yanma", "Wooper", "Quagsire", "Espeon", "Umbreon", "Murkrow", "Slowking", "Misdreavus", "Unown", "Wobbuffet", "Girafarig", "Pineco", "Forretress", "Dunsparce", "Gligar", "Steelix", "Snubbull", "Granbull", "Qwilfish", "Scizor", "Shuckle", "Heracross", "Sneasel", "Teddiursa", "Ursaring", "Slugma", "Magcargo", "Swinub", "Piloswine", "Corsola", "Remoraid", "Octillery", "Delibird", "Mantine", "Skarmory", "Houndour", "Houndoom", "Kingdra", "Phanpy", "Donphan", "Porygon2", "Stantler", "Smeargle", "Tyrogue", "Hitmontop", "Smoochum", "Elekid", "Magby", "Miltank", "Blissey", "Raikou", "Entei", "Suicune", "Larvitar", "Pupitar", "Tyranitar", "Lugia", "Hooh", "Celebi", "Treecko", "Grovyle", "Sceptile", "Torchic", "Combusken", "Blaziken", "Mudkip", "Marshtomp", "Swampert", "Poochyena", "Mightyena", "Zigzagoon", "Linoone", "Wurmple", "Silcoon", "Beautifly", "Cascoon", "Dustox", "Lotad", "Lombre", "Ludicolo", "Seedot", "Nuzleaf", "Shiftry", "Taillow", "Swellow", "Wingull", "Pelipper", "Ralts", "Kirlia", "Gardevoir", "Surskit", "Masquerain", "Shroomish", "Breloom", "Slakoth", "Vigoroth", "Slaking", "Nincada", "Ninjask", "Shedinja", "Whismur", "Loudred", "Exploud", "Makuhita", "Hariyama", "Azurill", "Nosepass", "Skitty", "Delcatty", "Sableye", "Mawile", "Aron", "Lairon", "Aggron", "Meditite", "Medicham", "Electrike", "Manectric", "Plusle", "Minun", "Volbeat", "Illumise", "Roselia", "Gulpin", "Swalot", "Carvanha", "Sharpedo", "Wailmer", "Wailord", "Numel", "Camerupt", "Torkoal", "Spoink", "Grumpig", "Spinda", "Trapinch", "Vibrava", "Flygon", "Cacnea", "Cacturne", "Swablu", "Altaria", "Zangoose", "Seviper", "Lunatone", "Solrock", "Barboach", "Whiscash", "Corphish", "Crawdaunt", "Baltoy", "Claydol", "Lileep", "Cradily", "Anorith", "Armaldo", "Feebas", "Milotic", "Castform", "Kecleon", "Shuppet", "Banette", "Duskull", "Dusclops", "Tropius", "Chimecho", "Absol", "Wynaut", "Snorunt", "Glalie", "Spheal", "Sealeo", "Walrein", "Clamperl", "Huntail", "Gorebyss", "Relicanth", "Luvdisc", "Bagon", "Shelgon", "Salamence", "Beldum", "Metang", "Metagross", "Regirock", "Regice", "Registeel", "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza", "Jirachi", "Deoxys", "Turtwig", "Grotle", "Torterra", "Chimchar", "Monferno", "Infernape", "Piplup", "Prinplup", "Empoleon", "Starly", "Staravia", "Staraptor", "Bidoof", "Bibarel", "Kricketot", "Kricketune", "Shinx", "Luxio", "Luxray", "Budew", "Roserade", "Cranidos", "Rampardos", "Shieldon", "Bastiodon", "Burmy", "Wormadam", "Mothim", "Combee", "Vespiquen", "Pachirisu", "Buizel", "Floatzel", "Cherubi", "Cherrim", "Shellos", "Gastrodon", "Ambipom", "Drifloon", "Drifblim", "Buneary", "Lopunny", "Mismagius", "Honchkrow", "Glameow", "Purugly", "Chingling", "Stunky", "Skuntank", "Bronzor", "Bronzong", "Bonsly", "mimejr", "Happiny", "Chatot", "Spiritomb", "Gible", "Gabite", "Garchomp", "Munchlax", "Riolu", "Lucario", "Hippopotas", "Hippowdon", "Skorupi", "Drapion", "Croagunk", "Toxicroak", "Carnivine", "Finneon", "Lumineon", "Mantyke", "Snover", "Abomasnow", "Weavile", "Magnezone", "Lickilicky", "Rhyperior", "Tangrowth", "Electivire", "Magmortar", "Togekiss", "Yanmega", "Leafeon", "Glaceon", "Gliscor", "Mamoswine", "PorygonZ", "Gallade", "Probopass", "Dusknoir", "Froslass", "Rotom", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Cresselia", "Phione", "Manaphy", "Darkrai", "Shaymin", "Arceus", "Victini", "Snivy", "Servine", "Serperior", "Tepig", "Pignite", "Emboar", "Oshawott", "Dewott", "Samurott", "Patrat", "Watchog", "Lillipup", "Herdier", "Stoutland", "Purrloin", "Liepard", "Pansage", "Simisage", "Pansear", "Simisear", "Panpour", "Simipour", "Munna", "Musharna", "Pidove", "Tranquill", "Unfezant", "Blitzle", "Zebstrika", "Roggenrola", "Boldore", "Gigalith", "Woobat", "Swoobat", "Drilbur", "Excadrill", "Audino", "Timburr", "Gurdurr", "Conkeldurr", "Tympole", "Palpitoad", "Seismitoad", "Throh", "Sawk", "Sewaddle", "Swadloon", "Leavanny", "Venipede", "Whirlipede", "Scolipede", "Cottonee", "Whimsicott", "Petilil", "Lilligant", "Basculin", "Sandile", "Krokorok", "Krookodile", "Darumaka", "Darmanitan", "Maractus", "Dwebble", "Crustle", "Scraggy", "Scrafty", "Sigilyph", "Yamask", "Cofagrigus", "Tirtouga", "Carracosta", "Archen", "Archeops", "Trubbish", "Garbodor", "Zorua", "Zoroark", "Minccino", "Cinccino", "Gothita", "Gothorita", "Gothitelle", "Solosis", "Duosion", "Reuniclus", "Ducklett", "Swanna", "Vanillite", "Vanillish", "Vanilluxe", "Deerling", "Sawsbuck", "Emolga", "Karrablast", "Escavalier", "Foongus", "Amoonguss", "Frillish", "Jellicent", "Alomomola", "Joltik", "Galvantula", "Ferroseed", "Ferrothorn", "Klink", "Klang", "Klinklang", "Tynamo", "Eelektrik", "Eelektross", "Elgyem", "Beheeyem", "Litwick", "Lampent", "Chandelure", "Axew", "Fraxure", "Haxorus", "Cubchoo", "Beartic", "Cryogonal", "Shelmet", "Accelgor", "Stunfisk", "Mienfoo", "Mienshao", "Druddigon", "Golett", "Golurk", "Pawniard", "Bisharp", "Bouffalant", "Rufflet", "Braviary", "Vullaby", "Mandibuzz", "Heatmor", "Durant", "Deino", "Zweilous", "Hydreigon", "Larvesta", "Volcarona", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Reshiram", "Zekrom", "Landorus", "Kyurem", "Keldeo", "Meloetta", "Genesect", "Chespin", "Quilladin", "Chesnaught", "Fennekin", "Braixen", "Delphox", "Froakie", "Frogadier", "Greninja", "Bunnelby", "Diggersby", "Fletchling", "Fletchinder", "Talonflame", "Scatterbug", "Spewpa", "Vivillon", "Litleo", "Pyroar", "Flabebe", "Floette", "Florges", "Skiddo", "Gogoat", "Pancham", "Pangoro", "Furfrou", "Espurr", "Meowstic", "Honedge", "Doublade", "Aegislash", "Spritzee", "Aromatisse", "Swirlix", "Slurpuff", "Inkay", "Malamar", "Binacle", "Barbaracle", "Skrelp", "Dragalge", "Clauncher", "Clawitzer", "Helioptile", "Heliolisk", "Tyrunt", "Tyrantrum", "Amaura", "Aurorus", "Sylveon", "Hawlucha", "Dedenne", "Carbink", "Goomy", "Sliggoo", "Goodra", "Klefki", "Phantump", "Trevenant", "Pumpkaboo", "Gourgeist", "Bergmite", "Avalugg", "Noibat", "Noivern", "Xerneas", "Yveltal", "Zygarde", "Diancie", "Hoopa", "Volcanion", "Rowlet", "Dartrix", "Decidueye", "Litten", "Torracat", "Incineroar", "Popplio", "Brionne", "Primarina", "Pikipek", "Trumbeak", "Toucannon", "Yungoos", "Gumshoos", "Grubbin", "Charjabug", "Vikavolt", "Crabrawler", "Crabominable", "Oricorio", "Cutiefly", "Ribombee", "Rockruff", "Lycanroc", "Wishiwashi", "Mareanie", "Toxapex", "Mudbray", "Mudsdale", "Dewpider", "Araquanid", "Fomantis", "Lurantis", "Morelull", "Shiinotic", "Salandit", "Salazzle", "Stufful", "Bewear", "Bounsweet", "Steenee", "Tsareena", "Comfey", "Oranguru", "Passimian", "Wimpod", "Golisopod", "Sandygast", "Palossand", "Pyukumuku", "Type: Null", "Silvally", "Minior", "Komala", "Turtonator", "Togedemaru", "Mimikyu", "Bruxish", "Drampa", "Dhelmise", "Jangmo_o", "Hakamo_o", "Kommo_o", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", "Cosmoem", "Solgaleo", "Lunala", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Necrozma", "Magearna", "Marshadow", "Poipole", "Naganadel", "Stakataka", "Blacephalon", "Zeraora", "Meltan", "Melmetal", "Grookey", "Thwackey", "Rillaboom", "Scorbunny", "Raboot", "Cinderace", "Sobble", "Drizzile", "Inteleon", "Skwovet", "Greedent", "Rookidee", "Corvisquire", "Corviknight", "Blipbug", "Dottler", "Orbeetle", "Nickit", "Thievul", "Gossifleur", "Eldegoss", "Wooloo", "Dubwool", "Chewtle", "Drednaw", "Yamper", "Boltund", "Rolycoly", "Carkol", "Coalossal", "Applin", "Flapple", "Appletun", "Silicobra", "Sandaconda", "Cramorant", "Arrokuda", "Barraskewda", "Toxel", "Toxtricity", "Sizlipede", "Centiskorch", "Clobbopus", "Grapploct", "Sinistea", "Polteageist", "Hatenna", "Hattrem", "Hatterene", "Impidimp", "Morgrem", "Grimmsnarl", "Obstagoon", "Perrserker", "Cursola", "Sirfetch'd", "Mr. Rime", "Runerigus", "Milcery", "Alcremie", "Falinks", "Pincurchin", "Snom", "Frosmoth", "Stonjoruner", "Eiscue", "Indeedee", "Morpeko", "Cufant", "Copperajah", "Dracozolt", "Arctozolt", "Dracovish", "Arctovish", "Duraludon", "Dreepy", "Drakloak", "Dragapult", "Zacian", "Zamazenta", "Eternatus", ""];
+var googleworks = false;
+var extras = new Array;
+var extrasDA = new Array;
+var extrasFA = new Array;
+
+extras[10] = "<img src=\"https://i.imgur.com/IVGZsA9.gif\"> Caterpija, the shiny Caterpie, one of my main OCs. Super gay.";
+extras[41] = "<img src=\"https://i.imgur.com/IVGZsA9.gif\"> Bangs the Zubat, one of my main OCs, she's blind and loved by everyone.";
+extras[23] = "Georgia. A skinny Ekans girl.";
+//extras[72] = "Lolicool. A tentacool girl.";
+extras[133] = "I've drawn a lot of Eevees but the Gastly+Eevee is worth mentioning.";
+extras[303] = "Meili. A laconic mawile who fights.";
+extras[360] = "Lady why. Just a cutie Wynaut with a cute hat.";
+extras[385] = "Mozzarélie, that one mozzarella flavored Jirachi I drew once from a randomizer.";
+extras[414] = "I drew a Mothim boy once. He still has no name but I like him.";
+extras[427] = "I have a buneary called Bursátil. She does stock market stuff.";
+extras[428] = "I've drawn a lot of lopunnies, some of them are fusions. I hold that all lopunny fusions are good.";
+extras[471] = "I have a male glaceon called Cher, he's cute.";
+extras[479] = "I drew a flat chested rotomgirl and animated her.";
+extras[548] = "<img src=\"https://i.imgur.com/IVGZsA9.gif\"> I love Petilils. My secretary is a petilil. Petilil is life.";
+extras[550] = "This Basculin mermaid has no name but I love her.";
+extras[637] = "Volsharona. She's a friend of Meili.";
+extras[676] = "Colliefleur. She's a french furfrou fan of the Matron trim.";
+extras[726] = "<img src=\"https://i.imgur.com/IVGZsA9.gif\"> Torrapat. This is my fursona (please be kind).";
+extras[264] = "I have a Linoone named S. Just S. She picks up items.";
+
+//Relevant characters and story arcs.
+
+extras[0] = "I drew a Missingno once. It's an interesting glitchy sight.";
+
+extras[82] = "Magneton is interesting. It's literally three magnemites and they are all cuties.";
+
+extras[129] = "I have a small story arc going on with some fish girls. Part 1.";
+extras[349] = "I have a small story arc going on with some fish girls. Part 1.";
+extras[130] = "I have a small story arc going on with some fish girls. Part 2.";
+extras[456] = "I have a small story arc going on with some fish girls. Part 3.";
+extras[350] = "I have a small story arc going on with some fish girls. Part 4.";
+extras[457] = "I have a small story arc going on with some fish girls. Part 4.";
+
+extras[422] = "Carnivorous fish are dangerous. Part 1.";
+extras[318] = "Carnivorous fish are dangerous. Part 2.";
+extras[423] = "Carnivorous fish are dangerous. Part 3.";
+extras[319] = "Carnivorous fish are dangerous. Part 4. Warning, there's blood. :(";
+
+extras[97] = "Hypno lost her pendulum. Part 1";
+extras[271] = "Hypno lost her pendulum. Part 2";
+extras[509] =  "Hypno lost her pendulum. Part 3.";
+
+extras[371] = "Cute halloween drawing featuring Axew, Bagon, Gible, and Goomy";
+extras[443] = "Cute halloween drawing featuring Axew, Bagon, Gible, and Goomy";
+extras[610] = "Cute halloween drawing featuring Axew, Bagon, Gible, and Goomy";
+extras[704] = "Cute halloween drawing featuring Axew, Bagon, Gible, and Goomy";
+
+extras[104] = "My take on the whole Cubone becomes Kangaskhan story. Part 1";
+extras[115] = "My take on the whole Cubone becomes Kangaskhan story. Part 2 and 3";
+extras[105] = "My take on the whole Cubone becomes Kangaskhan story. Part 4. Retroactive.";
+
+extras[27] = "Strange sand temple";
+extras[561] = "Strange sand temple. Also sigilyph is bae.";
+extras[562] = "Strange sand temple. Also Yamask ties in with <acronym title=\"Gastrodon\">another story arc.</acronym>";
+extras[563] = "Strange sand temple. Also Yamask ties in with <acronym title=\"Kangaskhan\">another story arc.</acronym>";
+
+extras[100] = "A robot girl and her technician (See venipede).";
+extras[101] = "A robot girl and her technician.";
+extras[543] = "A robot girl and her technician.";
+
+extras[595] = "Bug girl cuties.";
+extras[596] = "Bug girl cutie, all grown up.";
+extras[636] = "Bug girl cuties.";
+
+extras[43] = "A plant and a puppy. Part 1.";
+extras[44] = "A plant and a puppy. Part 2.";
+extras[261] = "A plant and a puppy. Part 2.";
+extras[182] = "A plant and a puppy. Part 3.";
+extras[262] = "A plant and a puppy. Part 3.";
+
+</script>
+
+<script src="https://drive.google.com/uc?export=view&id=0B6KFWbW7R_pKTkNLbVA4Y3hSdjg"></script>
+
+<div align="center">
+	<p id="big">Completion status: <script>document.write(pokemon_amount);</script>/890</p><p>
+	<hr><b><font color="#FF0000">Hey! Read this!</font></b></p>
+	<p>Click on any pokemon below to search for the corresponding pic at my
+	<script>
+	if (hayParametro("DA")) document.write("<b>deviantArt</b>");
+	else if (hayParametro("e621")) document.write('e621.<br>Keep in mind that not all my art is posted to e621 so it might not show up there at all.');
+	else if (hayParametro("tumblr")) document.write('Tumblr.<br>Keep in mind though that my tumblr was nuked because of DMCA claims by you-know-who. So, 98% of the stuff is gone from there. You might want to try searching for them at <a href="pokedex">deviantart</a> instead)');
+	else document.write("<b>Furaffinity</b>");
+	
+	</script>.<p><i><u><font color="#FFFF00">
+	<!-- Because most robots can't read pictures--><img border="0" src="https://i.imgur.com/JooSWlp.png" width="1000" height="16"></font></u></i></p>
+	</p></div>
+	
+	<hr>
+	<div align="center">
+		<u><b></b>Links and settings:</b></u><br>
+		( Change links to : <a href="./pokedex?DA">Deviantart.</a><a href="./pokedex?DA&icons"><sup>(icons)</sup></a> | <a href="./pokedex?FA">Furaffinity.</a><a href="./pokedex?FA&icons"><sup>(icons)</sup></a> | <a href="./pokedex?e621">e621.</a> )<br>
+		( Text lists : <a href="http://elpatrixf.deviantart.com/journal/elPokedexF-366429444">Deviantart.</a> | | <a href="http://www.furaffinity.net/journal/5182681/">Furaffinity.</a> )<br>
+		<a href="https://randompokemon.com/">( Randomizer. )</a><br>
+		<script>if (!(googleworks)) document.write("<br><b>ERROR:</b> Google drive list is not reachable, falling back to 9/6/2021 backup.<br>Currently not working!! I need to fix it...<br>")</script></div>
+
+<hr>
+<p><script>
+function zeroFill( number, width )
+{
+  width -= number.toString().length;
+  if ( width > 0 )
+  {
+    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+  }
+  return number + ""; // always return a string
+}
+
+//document.write(pokemon_list);
+var ss = "";
+var count = 0;
+var shiny = false;
+var vee = false;
+
+for (i = 1; i<=890; i++)
+{
+	{
+
+		shiny = false;
+		vee = false;
+
+		//numero			https://www.serebii.net/swordshield/pokemon/815.png
+		ss = i;
+		
+	if (hayParametro("forceFemale")) {ss = i+"-f";}
+	else{
+		if (i==10)		shiny=true;//ss = "shiny/"+i; //
+		if (i==12)		shiny=true;//ss = "shiny/"+i; // 
+		
+		if (i==103)		{ss = i+"-alola";vee=true;}
+		if (i==150)		{ss = i+"-mega-y";vee=true;}
+		if (i==201)		{ss = i+"-s";vee=true;}
+		
+		if (i==303)		{ss = i+"-mega";vee=true;}
+		if (i==354)		{ss = i+"-mega";vee=true;}
+		if (i==422)		{ss = i+"-e";}
+		if (i==428)		{ss = i+"-mega";vee=true;}
+		if (i==492)		{ss = i+"-sky";vee=true;}
+		if (i==521)		{ss = i+"-f";}
+		
+		if (i==551)		{ss = "shiny/"+i;vee=true;}
+		if (i==553)		{ss = "shiny/"+i;vee=true;}
+		
+		if (i==592)		{ss = i+"-f";}
+		if (i==666)		{ss = i+"-marine";vee=true;}
+		if (i==670)		{ss = i+"-blue";vee=true;}
+		if (i==678)		{ss = i+"-f";}
+		if (i==676)		{ss = i+"-matron";vee=true;}
+		
+		if (i==716)		{vee=true;}
+		if (i==876)		{ss = i+"-f";}
+	}
+		
+		if (hayParametro("bulbapedia"))				document.write("<a href=\"https://bulbapedia.bulbagarden.net/wiki/"+pokemon_names[i]+"_(Pok%C3%A9mon)\">");
+ 		else if (hayParametro("DA"))				document.write("<a href=\"http://elpatrixf.deviantart.com/gallery/?catpath=%2F&q=%23"+pokemon_names[i]+"\">");
+ 		else if (hayParametro("e621"))				document.write("<a href=\"https://e621.net/post/index/1/"+pokemon_names[i]+"%20elpatrixf\">");
+		else if ((hayParametro("tumblr")))			document.write("<a href=\"http://notfarts.tumblr.com/tagged/"+zeroFill(i,5)+"\">");
+ 		else 										document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf\">");
+
+		if (!(hayParametro("offline")))
+		{
+			if (hayParametro("icons"))		document.write("<img src=\"https://www.serebii.net/pokedex-swsh/icon/"+zeroFill(i,3)+".png\" ");
+			else if (vee)					document.write("<img src=\"https://veekun.com/dex/media/pokemon/main-sprites/ultra-sun-ultra-moon/"+ss+".png\" width=128");
+			else if (shiny)					document.write("<img src=\"https://www.serebii.net/Shiny/SWSH/"+zeroFill(ss,3)+".png\" width=128")
+			else							document.write("<img src=\"https://www.serebii.net/swordshield/pokemon/"+zeroFill(ss,3)+".png\" width=128")
+ 		}
+ 		else 																	document.write("<img src=\""+zeroFill(ss,3)+".png\" width=128");
+
+		if (pokemon_list.substring(i-1, i) == 0)  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\" style=\"opacity:0.1\"></a>");}
+		else									  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\"></a>");count++;}
+	}
+}
+
+
+var putcomma=", ";
+var pkecount = 1;
+
+document.write("</div><hr><div><p>In plain text, the ones I've done so far are, in national order");
+for (i = 1; i<=890; i++)
+{
+	if (pokemon_list.substring(i-1, i) > 0)
+	{
+		pkecount++;
+		document.write(putcomma);
+		
+		if (hayParametro("DA"))						document.write("<a href=\"http://elpatrixf.deviantart.com/gallery/?catpath=%2F&q=%23"+pokemon_names[i]+"\">");
+ 		else if (hayParametro("e621"))				document.write("<a href=\"https://e621.net/post/index/1/elpatrixf%20"+pokemon_names[i]+"\">");
+ 		else if ((hayParametro("tumblr"))&&(i>99))	document.write("<a href=\"http://notfarts.tumblr.com/tagged/00"+i+"\">");
+ 		else if ((hayParametro("tumblr"))&&(i>9))	document.write("<a href=\"http://notfarts.tumblr.com/tagged/000"+i+"\">");
+		else if ((hayParametro("tumblr")))			document.write("<a href=\"http://notfarts.tumblr.com/tagged/0000"+i+"\">");
+ 		else 										document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf\">");
+		
+		document.write(pokemon_names[i]+"</a>");
+		
+		if (pkecount>=pokemon_amount) putcomma=", and ";
+	}
+}
+document.write(". A grand total of "+count+".</p></div>");
+
+
+//if (hayParametro("list")) {
+							{
+	document.write("<hr><div><h2>Extra info!</h2>This section is for me to add some relevant context and tidbits of information about some of my drawings. For more information you can check my <a href=\"http://elpatrixf.deviantart.com/journal/elPokedexF-366429444\">Deviantart</a> journal.</div><div>");
+
+	document.write("<b><img src=\"https://i.imgur.com/C5PDzRr.gif\"> #0 "+pokemon_names[0]+"</b> - ");
+	if (hayParametro("DA"))		document.write("<a href=\"http://elpatrixf.deviantart.com/gallery/?catpath=%2F&q=%23missingno\">[Link!]</a> - "+extras[i]+"<br>");
+	else 						document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20missingno%20@lower%20elpatrixf\">[Link!]</a> - "+extras[i]+"<br>");
+
+	for (i = 1; i<=890; i++)
+	if ((extras[i]!=undefined)&&(pokemon_list.substring(i-1, i) != 0)){
+		{
+	
+			shiny = false;
+			vee = false;
+	
+			//numero			https://www.serebii.net/swordshield/pokemon/815.png
+			ss = i;
+			
+		if (hayParametro("forceFemale")) {ss = i+"-f";}
+		else{
+			if (i==10)		shiny=true;//ss = "shiny/"+i; //
+			if (i==12)		shiny=true;//ss = "shiny/"+i; // 
+			
+			if (i==103)		{ss = i+"-alola";vee=true;}
+			if (i==150)		{ss = i+"-mega-y";vee=true;}
+			if (i==201)		{ss = i+"-s";vee=true;}
+			
+			if (i==303)		{ss = i+"-mega";vee=true;}
+			if (i==354)		{ss = i+"-mega";vee=true;}
+			if (i==422)		{ss = i+"-e";}
+			if (i==428)		{ss = i+"-mega";vee=true;}
+			if (i==492)		{ss = i+"-sky";vee=true;}
+			if (i==521)		{ss = i+"-f";}
+			
+			if (i==551)		{ss = "shiny/"+i;vee=true;}
+			if (i==553)		{ss = "shiny/"+i;vee=true;}
+			
+			if (i==592)		{ss = i+"-f";}
+			if (i==666)		{ss = i+"-marine";vee=true;}
+			if (i==670)		{ss = i+"-blue";vee=true;}
+			if (i==678)		{ss = i+"-f";}
+			if (i==676)		{ss = i+"-matron";vee=true;}
+			
+			if (i==716)		{vee=true;}
+			if (i==876)		{ss = i+"-f";}
+		}
+		
+			document.write("<b><img src=\"https://www.serebii.net/pokedex-swsh/icon/"+zeroFill(i,3)+".png\"> #"+i+" "+pokemon_names[i]+"</b> - ");
+			
+			if (hayParametro("FA"))		
+	 		{
+	 			if (extrasDA[i] != undefined) document.write("<a href=\""+extrasDA[i]+"\">[Direct link!]</a> - "+extras[i]+"<br>");
+	 			else document.write("<a href=\"http://elpatrixf.deviantart.com/gallery/?catpath=%2F&q=%23"+pokemon_names[i]+"\">[Tag search]</a> - "+extras[i]+"<br>");
+			} else
+			{
+				if (extrasFA[i] != undefined) document.write("<a href=\""+extrasFA[i]+"\">[Direct link!]</a> - "+extras[i]+"<br>");
+				else document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf\">[Tag search]</a> - "+extras[i]+"<br>");
+	 		}
+		}
+	}
+}
+
+</script></p>
+
+<hr>
+	<div class="random_selectors" align="center"><a href="./pokedex/random"><img id="random" src="https://i.imgur.com/P7BNbII.png" title="Click here if you want to select a random pokemon."></a></div>
+<hr>
+<div align="left">
+<font color="#333333">v1.54 (Galar represents) - Thanks <a href="http://veekun.com">veekun</a> and <a href="https://www.serebii.net/">Serebii</a> for everything and sorry for any inconvenience!</font></div>
+</body>
+ 
