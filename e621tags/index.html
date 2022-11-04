@@ -225,7 +225,7 @@ body {
   Bottom range:<input type="range" min="1" max="56245" value="1" class="slider" id="difficulty_bottom"><br>
   Quantity:<input type="range" min="1" max="16" value="3" class="slider" id="amount"><br>
   <input type="checkbox" id="do_species">Include a randomly selected species tag</input><br>
-  <input type="checkbox" id="do_gradual_difficulty">Make tags gradually more difficult.</input><br>
+  <input type="checkbox" id="do_gradual_difficulty">Make tags gradually more difficult.</input><abbr title="First tag will be randomly picked from a much smaller pool, containing only popular ones. Second will have a larger pool, and so on. Last tag will pick from the full range.">(?)</abbr><br>
   <input type="checkbox" id="show_rank">Display the rank of each tag by popularity</input><br>
 </div>
 <script>
@@ -281,7 +281,7 @@ body {
   		  if (slider3.value == slider.value) update_curset("<br>Please move the range sliders or else you'll only get 1 single tag.");
 		}
 
-</script>Made by <a href="http://twitter.com/elpatrixf">elPatrixF</a>. <abbr title="Updated taglist to 2022. Added increasing difficulty tags.">v1.6a</abbr> Last modified 11/2022<br>By using this website you agree to be at least 18 years old.</div>
+</script>Made by <a href="http://twitter.com/elpatrixf">elPatrixF</a>. <abbr title="Updated taglist to 2022. Fixed parameters, and added Easy Mode (Gradual tags).">v1.6b</abbr> Last modified 11/2022<br>By using this website you agree to be at least 18 years old.</div>
 	</tr>
 </table>
 
