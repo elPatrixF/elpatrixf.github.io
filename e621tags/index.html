@@ -94,7 +94,7 @@ function generala(n,m)
 	for (i=0;i<m;i++)
 	{
 		gottem = 0;
-		gottem = randint(tags[1].length);
+		gottem = Math.round((randint(tags[1].length)*(range_big+10))/(tags[0].length+10));
 		chosentag=tags[1][gottem];
 		tags_got += slash(chosentag) + "%20";
 //		console.log(range_bottom+".."+range+" = "+gottem);
@@ -225,7 +225,7 @@ body {
   Top range:<input type="range" min="1" max="56245" value="4500" class="slider" id="difficulty"><br>
   Bottom range:<input type="range" min="1" max="56245" value="1" class="slider" id="difficulty_bottom"><br>
   Quantity:<input type="range" min="1" max="16" value="3" class="slider" id="amount"><br>
-  <input type="checkbox" id="do_species">Include a randomly selected species tag</input> <abbr title="This will pick a completely random species from the 18785 available.">(?)</abbr><br>
+  <input type="checkbox" id="do_species">Include a randomly selected species tag</input> <abbr title="This will pick a  random species from the 18785 available, using the top slider as reference for variety.">(?)</abbr><br>
   <input type="checkbox" id="no_gradual_difficulty">Make all tags equally rare.</input> <abbr title="If this is unchecked, first tag will be randomly picked from a much smaller pool, containing only popular ones. Second will have a larger pool, and so on. Last tag will pick from the full range.">(?)</abbr><br>
   <input type="checkbox" id="show_rank">Display the rank of each tag by popularity</input><br>
 </div>
@@ -278,11 +278,11 @@ body {
 		  slider.value = Math.max (slider.value , this.value)
 		  range_big =  slider.value;
 		  update_curset("");
-		  if (slider3.value > 56000) update_curset("<br>Keep in mind these few tags are all potentially invalid tags.")
+		  if (slider3.value > 56000) update_curset("<br>Keep in mind these few tags are all potentially invalid tags.");
   		  if (slider3.value == slider.value) update_curset("<br>Please move the range sliders or else you'll only get 1 single tag.");
 		}
 
-</script>Made by <a href="http://twitter.com/elpatrixf">elPatrixF</a>. <abbr title="Updated taglist to 2022. Fixed parameters, added Easy mode by default, and indicator of hard mode. Fixed post search link.">v1.6e</abbr> Last modified 11/2022<br>By using this website you agree to be at least 18 years old.</div>
+</script>Made by <a href="http://twitter.com/elpatrixf">elPatrixF</a>. <abbr title="Updated taglist to 2022. Made randomizer more forgiving by making the first few tags more popular by default. Fixes.">v1.7.1</abbr> Last modified 11/2022<br>By using this website you agree to be at least 18 years old.</div>
 	</tr>
 </table>
 
