@@ -216,8 +216,8 @@ body {
 	<p>Move the sliders below to change the parameters. You can also pass the parameters through the URL <a href="http://elpatrixf.com/e621tags?range=2000&range_bottom=1&to_generate=3&species_tags">like this</a>.<br>Push them to the right to get rarer tags, pull them to the left to get <a hreF="https://e621.net/tag?name=&type=0&order=count&limit=5000" target="_blank">more common tags</a>.<br>Clicking on any of the generated tags will redirect you to the respective e621 wiki page.</p>
   	
   	<p align="right">
-  Top range:<input type="range" min="1" max="56250" value="4000" class="slider" id="difficulty"><br>
-  Bottom range:<input type="range" min="1" max="56250" value="1" class="slider" id="difficulty_bottom"><br>
+  Top range:<input type="range" min="1" max="56245" value="4000" class="slider" id="difficulty"><br>
+  Bottom range:<input type="range" min="1" max="56245" value="1" class="slider" id="difficulty_bottom"><br>
   Quantity:<input type="range" min="1" max="12" value="3" class="slider" id="amount"><br>
   <input type="checkbox" id="do_species">Include a randomly selected species tag</input><br>
   <input type="checkbox" id="do_gradual_difficulty">Make tags gradually more difficult.</input><br>
@@ -268,6 +268,7 @@ body {
 		  slider.value = Math.max (slider.value , this.value)
 		  range_big =  slider.value;
 		  update_curset("");
+		  if (slider3.value > 56000) update_curset("<br>Keep in mind these few tags are all potentially invalid tags.")
   		  if (slider3.value == slider.value) update_curset("<br>Please move the range sliders or else you'll only get 1 single tag.");
 		}
 
