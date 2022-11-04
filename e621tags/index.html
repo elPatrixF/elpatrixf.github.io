@@ -70,7 +70,7 @@ function randint(a) {return Math.floor(Math.random() * a);}
 	//Read from param
 	if (getParameterByName("range") != null) range_big=getParameterByName("range"); 
 	if (getParameterByName("range_bottom") != null) range_bottom=getParameterByName("range_bottom"); 
-	if (getParameterByName("species_tags") != "true") species_tags=true; 
+	if (getParameterByName("species_tags") == "true") species_tags=true; 
 	if (getParameterByName("to_generate") != null) to_generate=getParameterByName("to_generate");
 	if (getParameterByName("display_rank") == "true") display_rank=true;
 	if (getParameterByName("do_gradual") == "true") do_gradual=true;
