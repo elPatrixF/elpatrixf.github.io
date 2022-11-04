@@ -60,7 +60,7 @@ function randint(a) {return Math.floor(Math.random() * a);}
 
 	var tags = [];
 	var range_bottom = 1;
-	var range_big = 3500;
+	var range_big = 4500;
 	var species_tags = false;
 	var to_generate = 4;
 	var display_rank = false;
@@ -222,7 +222,7 @@ body {
 	<p>Move the sliders below to change the parameters. You can also pass the parameters through the URL <a href="http://elpatrixf.com/e621tags?range=2000&range_bottom=1&to_generate=3&species_tags">like this</a>.<br>Push them to the right to get rarer tags, pull them to the left to get <a hreF="https://e621.net/tag?name=&type=0&order=count&limit=5000" target="_blank">more common tags</a>.<br>Clicking on any of the generated tags will redirect you to the respective e621 wiki page.</p>
   	
   	<p align="right">
-  Top range:<input type="range" min="1" max="56245" value="4000" class="slider" id="difficulty"><br>
+  Top range:<input type="range" min="1" max="56245" value="4500" class="slider" id="difficulty"><br>
   Bottom range:<input type="range" min="1" max="56245" value="1" class="slider" id="difficulty_bottom"><br>
   Quantity:<input type="range" min="1" max="16" value="3" class="slider" id="amount"><br>
   <input type="checkbox" id="do_species">Include a randomly selected species tag</input> <abbr title="This will pick a completely random species from the 18785 available.">(?)</abbr><br>
