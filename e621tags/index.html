@@ -60,15 +60,15 @@ function randint(a) {return Math.floor(Math.random() * a);}
 
 	var tags = [];
 	var range_bottom = 1;
-	var range = 3500;
+	var range_big = 3500;
 	var species_tags = false;
 	var to_generate = 4;
 	var display_rank = false;
-  var do_gradual = false;
+    var do_gradual = false;
 	var shareable_link = "";
 	
 	//Read from param
-	if (getParameterByName("range") != null) range=getParameterByName("range"); 
+	if (getParameterByName("range") != null) range_big=getParameterByName("range"); 
 	if (getParameterByName("range_bottom") != null) range_bottom=getParameterByName("range_bottom"); 
 	if (getParameterByName("species_tags") != null) species_tags=true; 
 	if (getParameterByName("to_generate") != null) to_generate=getParameterByName("to_generate");
@@ -103,8 +103,8 @@ function generala(n,m)
 	for (i=0;i<n;i++)
 	{
 		gottem = 0;
-		if (do_gradual) gottem = Math.round(randint(range-range_bottom+1)*(i+1)/(n+1))+ (range_bottom-1);
-    else            gottem = randint(range-range_bottom+1)+ (range_bottom-1);
+		if (do_gradual) gottem = Math.round(randint(range_big-range_bottom+1)*(i+1)/(n+1))+ (range_bottom-1);
+    else            gottem = randint(range_big-range_bottom+1)+ (range_bottom-1);
 		chosentag=tags[0][gottem];
 		tags_got += slash(chosentag) + "%20";
 //		console.log(range_bottom+".."+range+" = "+gottem);
@@ -120,11 +120,11 @@ function generala(n,m)
 function generala_easy(n,m)
 {
     var range_bottom_backup = range_bottom;
-	var range_backup = range;
+	var range_backup = range_big;
 	range_bottom = 0;
-	range = 300;
+	range_big = 300;
     generala(n,m)
-    range = range_backup;
+    range_big = range_backup;
     range_bottom = range_bottom_backup;
 }
 
@@ -133,17 +133,17 @@ function generala_hard(n,m)
     var range_bottom_backup = range_bottom;
 	var range_backup = range;
 	range_bottom = 10000;
-	range = 15000;
+	range_big = 15000;
     generala(n,m)
-    range = range_backup;
+    range_big = range_backup;
     range_bottom = range_bottom_backup;
 }
 
 function update_curset(appendo)
 {
-	shareable_link = "http://elpatrixf.com/e621tags?range="+range+"&range_bottom="+range_bottom+"&to_generate="+to_generate+"&species_tags="+species_tags+"&display_rank="+display_rank;
+	shareable_link = "http://elpatrixf.com/e621tags?range="+range_big+"&range_bottom="+range_bottom+"&to_generate="+to_generate+"&species_tags="+species_tags+"&display_rank="+display_rank;
 	
-	document.getElementById("curset").innerHTML = '<h4>Currently selecting <font color="#FF0000">'+to_generate+'</font> random tags between the <font color="#FF0000">'+ordinal_suffix_of(range_bottom)+'</font> and the <font color="#FF0000">'+ordinal_suffix_of(range)+'</font> most popular General tags on e621.<br>This means we are choosing from a total of <font color="#FF0000">'+(range-range_bottom+1)+"</font> tags. (<a href="+shareable_link+">Shareable link</a>)"+appendo+"</h4>";
+	document.getElementById("curset").innerHTML = '<h4>Currently selecting <font color="#FF0000">'+to_generate+'</font> random tags between the <font color="#FF0000">'+ordinal_suffix_of(range_bottom)+'</font> and the <font color="#FF0000">'+ordinal_suffix_of(range_big)+'</font> most popular General tags on e621.<br>This means we are choosing from a total of <font color="#FF0000">'+(range_big-range_bottom+1)+"</font> tags. (<a href="+shareable_link+">Shareable link</a>)"+appendo+"</h4>";
 	
 }
 
@@ -230,9 +230,9 @@ body {
 		var slider3 = document.getElementById("difficulty_bottom");
 		var slider4 = document.getElementById("do_species");
 		var slider5 = document.getElementById("show_rank");
-    var slider6 = document.getElementById("do_gradual_difficulty");
+        var slider6 = document.getElementById("do_gradual_difficulty");
 		
-		slider.value = range;
+		slider.value = range_big;
 		slider2.value = to_generate;
 		slider3.value = range_bottom; 
 		slider4.checked = species_tags;
@@ -257,7 +257,7 @@ body {
 		
 		
 		slider.oninput = function() {
-		  range =  this.value;
+		  range_big =  this.value;
 		  slider3.value = Math.min (slider3.value , this.value)
 		  range_bottom =  slider3.value;
 		  update_curset("");
@@ -266,7 +266,7 @@ body {
 		slider3.oninput = function() {
 		  range_bottom =  this.value;
 		  slider.value = Math.max (slider.value , this.value)
-		  range =  slider.value;
+		  range_big =  slider.value;
 		  update_curset("");
   		  if (slider3.value == slider.value) update_curset("<br>Please move the range sliders or else you'll only get 1 single tag.");
 		}
