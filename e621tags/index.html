@@ -94,7 +94,7 @@ function generala(n,m)
 	for (i=0;i<m;i++)
 	{
 		gottem = 0;
-		gottem = Math.round((randint(tags[1].length)*(range_big+10))/(tags[0].length+10));
+		gottem = Math.round((randint(tags[1].length)*(range_big-(-10)))/(tags[0].length+10));
 		chosentag=tags[1][gottem];
 		tags_got += slash(chosentag) + "%20";
 //		console.log(range_bottom+".."+range+" = "+gottem);
