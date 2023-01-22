@@ -1,4 +1,11 @@
 <html>
+<head>
+<title>Fair Random Pokemon Generator for Pokefusion</title>	
+<meta property="og:title" content="Fair Random Pokemon Generator for Pokefusion">
+<meta property="og:description" content="Tihs website will generate two random pokemon which are fun to fuse and don't suck.">
+<meta property="og:image" content="https://cdn.discordapp.com/emojis/996157223581515806.webp">
+</head>
+
 <body>
 <style>
 
@@ -1246,7 +1253,8 @@ function GenA()
 {
 	resultA = vialist[rand(vialist.length)];
 	document.getElementById('GenA').src = urlbase + getParameter(resultA,"file");
-	document.getElementById('ScoreA').innerText = getBase(resultA)+"/"+getElem(resultA);
+	document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
+	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
 	populateB();
 }
 
@@ -1254,7 +1262,7 @@ function GenB()
 {
 	resultB = compatible[rand(compatible.length)];
 	document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
-	document.getElementById('ScoreB').innerText = getBase(resultB)+"/"+getElem(resultB);
+	document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
 	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
 }
 
@@ -1282,19 +1290,23 @@ p
 
 <div class="random_selectors" align="center">
 	<p align="center" id="target">Target score: -/- to -/-</p>
-	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<td>
-				<p align="center"><a href="#"><img id="GenA" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onmousedown="this.src =('https://i.imgur.com/P7BNbII.png');" onmouseup="GenA()"></a></p>	
-				<p align="center" id="ScoreA">-/-</p>
+				<p align="center"><a href="#"><img id="GenA" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="this.src =('https://i.imgur.com/P7BNbII.png');GenA();"></a></p>	
+				<p align="center" id="ScoreA">...</p>
 			</td>
 			<td>
-				<p align="center"><a href="#"><img id="GenB" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onmousedown="this.src =('https://i.imgur.com/P7BNbII.png');" onmouseup="GenB()"></a></p>	
-				<p align="center" id="ScoreB">-/-</p>
+				<p style="font-size: 122px"><a href="#" style="text-decoration: none" onclick="document.getElementById('GenA').src =('https://i.imgur.com/P7BNbII.png');document.getElementById('GenB').src =('https://i.imgur.com/P7BNbII.png');GenA();GenB();">+</a></p>
+			</td>
+			<td>
+				<p align="center"><a href="#"><img id="GenB" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="this.src =('https://i.imgur.com/P7BNbII.png');GenB();"></a></p>	
+				<p align="center" id="ScoreB">...</p>
 			</td>
 		</tr>
 	</table>
 	<p align="center" id="total">Total score: -/-</p>
+	<p align="right" style="font-size:8px;opacity:0.5;">Version 0.6.1</p>
 	</div>
 
 <script>
