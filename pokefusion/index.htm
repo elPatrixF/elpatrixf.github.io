@@ -3693,6 +3693,7 @@ p,dialog
 
 <div class="random_selectors" align="center">
 	<p align="center" id="target">Target score: -/- to -/-</p>
+	<p align="center" style="font-size:12px"><a href="#" onclick="openTargetSettings();">[Change settings!]</a></p>
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<td>
@@ -3709,15 +3710,68 @@ p,dialog
 		</tr>
 	</table>
 	<p align="center" id="total">Total score: -/-</p>
-	<!-- <p align="center"><a href="#" onclick="document.getElementById('targetSettings').showModal()">[Change target score]</a></p> -->
 	
-	<dialog id="targetSettings">
-	<p>Please choose your new target score range:</p>
-	<button id="cancelTarget" onclick="document.getElementById('targetSettings').close();">Cancel</button>
-	<button id="confirmTarget" onclick="document.getElementById('targetSettings').close();setNewTargets();">OK</button>
+	<script>
+	function openTargetSettings()
+	{
+		document.getElementById('base_bottom').value = targetBottom[0];
+		document.getElementById('elem_bottom').value = targetBottom[1];
+		document.getElementById('base_top').value = targetTop[0];
+		document.getElementById('elem_top').value = targetTop[1];
+		
+		if (pokemonlist == averagelist) document.getElementById("dataset").value = "average";
+		if (pokemonlist == vialist) document.getElementById("dataset").value = "via";
+		if (pokemonlist == patlist) document.getElementById("dataset").value = "pat";
+		
+		document.getElementById('targetSettings').showModal()
+	}
+	function setNewTargets()
+	{
+		targetBottom[0] = document.getElementById('base_bottom').value -0;
+		targetBottom[1] = document.getElementById('elem_bottom').value -0;
+		
+		targetTop[0] = document.getElementById('base_top').value -0;
+		targetTop[1] = document.getElementById('elem_top').value -0;
+		
+		if (targetTop[0]-0<targetBottom[0]-0) {targetTop[0]=targetBottom[0];console.log("Base top lower than bottom");}
+		if (targetTop[1]-0<targetBottom[1]-0) {targetTop[1]=targetBottom[1];console.log("Elements top lower than bottom");}
+		
+		updateScore();
+		
+		if (document.getElementById("dataset").value == "average") pokemonlist = averagelist;
+		if (document.getElementById("dataset").value == "via") pokemonlist = vialist;
+		if (document.getElementById("dataset").value == "pat") pokemonlist = patlist;
+	}
+	</script>
+	
+	<dialog id="targetSettings" style="font-size:64px">
+	<p style="font-size:24px">Please choose your new target score range:</p>
+	<p style="font-size:64px">
+		<input style="font-size:64px;width: 155px" type="number" step="0.5" min="0" max="12" id="base_bottom"></input>
+		/
+		<input style="font-size:64px;width: 155px" type="number" step="0.5" min="0" max="12" id="elem_bottom"></input>
+		to 
+		<input style="font-size:64px;width: 155px" type="number" step="0.5" min="0" max="12" id="base_top"></input>
+		/
+		<input style="font-size:64px;width: 155px" type="number" step="0.5" min="0" max="12" id="elem_top"></input>
+	</p>
+	<br>
+	<p style="font-size:24px">Please choose your dataset:</p>
+	<p>
+		<select style="font-size:24px" id="dataset">
+          <option value="average">Average Scores</option>
+          <option value="via">Via Scores</option>
+          <option value="pat">Pat Scores</option>
+        </select>
+	</p>
+	<br>
+	<p>
+		<button style="font-size:24px" id="cancelTarget" onclick="document.getElementById('targetSettings').close();">Cancel</button>
+		<button style="font-size:24px" id="confirmTarget" onclick="document.getElementById('targetSettings').close();setNewTargets();">OK</button>
+	</p>
 	</dialog>
 	
-	<p align="right" style="font-size:8px;opacity:0.5;">Version 0.7.2</p>
+	<p align="right" style="font-size:16px;opacity:0.5;">Version 0.8.1</p>
 	</div>
 
 <script>	
