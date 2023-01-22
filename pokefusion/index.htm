@@ -3650,9 +3650,11 @@ function SetA(i)
 	resultA = pokemonlist[i];
 	document.getElementById('GenA').src = urlbase + getParameter(resultA,"file");
 	document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
-	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
-	document.getElementById('ScoreB').innerText = "...";
-	document.getElementById('DetailsB').innerText = "...";
+	//document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	document.getElementById('total').innerHTML = "&nbsp;";
+	document.getElementById('ScoreB').innerHTML = "&nbsp;";
+	document.getElementById('DetailsB').innerHTML = "&nbsp;";
+	document.getElementById('GenB').src = "https://i.imgur.com/P7BNbII.png";
 	populateB();
 }
 
@@ -3661,9 +3663,11 @@ function GenA()
 	resultA = pokemonlist[rand(pokemonlist.length)];
 	document.getElementById('GenA').src = urlbase + getParameter(resultA,"file");
 	document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
-	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
-	document.getElementById('ScoreB').innerText = "...";
-	document.getElementById('DetailsB').innerText = "...";
+	//document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	document.getElementById('total').innerHTML = "&nbsp;";
+	document.getElementById('ScoreB').innerHTML = "&nbsp;";
+	document.getElementById('DetailsB').innerHTML = "&nbsp;";
+	document.getElementById('GenB').src = "https://i.imgur.com/P7BNbII.png";
 	populateB();
 }
 //---------------
@@ -3821,20 +3825,20 @@ p.help
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<td>
-				<p align="center"><a href="#"><img id="GenA" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="document.getElementById('GenB').src =('https://i.imgur.com/P7BNbII.png');this.src =('https://i.imgur.com/P7BNbII.png');GenA();"></a></p>	
-				<p align="center" id="ScoreA">...</p>
+				<p align="center"><a href="#"><img id="GenA" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="this.src =('https://i.imgur.com/P7BNbII.png');GenA();"></a></p>	
+				<p align="center" id="ScoreA">&nbsp;</p>
 			</td>
 			<td>
 				<p style="font-size: 122px"><a href="#" style="text-decoration: none" onclick="document.getElementById('GenA').src =('https://i.imgur.com/P7BNbII.png');document.getElementById('GenB').src =('https://i.imgur.com/P7BNbII.png');GenA();GenB();">+</a></p>
 			</td>
 			<td>
 				<p align="center"><a href="#"><img id="GenB" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="this.src =('https://i.imgur.com/P7BNbII.png');GenB();"></a></p>	
-				<p align="center" id="ScoreB">...</p>
+				<p align="center" id="ScoreB">&nbsp;</p>
 			</td>
 		</tr>
 	</table>
-	<p align="center" id="total">Total score: -/-</p>
-	<p align="center" style="font-size:12px;opacity:0.6;" id="DetailsB">...</p>
+	<p align="center" id="total">Click on the plus + sign</p>
+	<p align="center" style="font-size:12px;opacity:0.6;" id="DetailsB">Or on the Pokeball to the left...</p>
 	
 	<script>
 	function openTargetSettings()
@@ -3880,9 +3884,9 @@ p.help
 		
 		document.getElementById('GenA').src = "https://i.imgur.com/P7BNbII.png";
 		document.getElementById('GenB').src = "https://i.imgur.com/P7BNbII.png";
-		document.getElementById('ScoreA').innerText = "...";
-		document.getElementById('ScoreB').innerText = "...";
-		document.getElementById('DetailsB').innerText = "...";
+		document.getElementById('ScoreA').innerHTML = "&nbsp;";
+		document.getElementById('ScoreB').innerHTML = "&nbsp;";
+		document.getElementById('DetailsB').innerHTML = "&nbsp;";
 		document.getElementById('fullScores').innerHTML = '';
 	}
 	</script>
@@ -3917,7 +3921,7 @@ p.help
 	<!-- FULL SCORES -->
 	<p id="fullScores" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.10.3<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.11.0<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
