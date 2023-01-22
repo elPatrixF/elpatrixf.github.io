@@ -3829,7 +3829,7 @@ p.help
 				<p align="center" id="ScoreA">&nbsp;</p>
 			</td>
 			<td>
-				<p style="font-size: 122px"><a href="#" style="text-decoration: none" onclick="document.getElementById('GenA').src =('https://i.imgur.com/P7BNbII.png');document.getElementById('GenB').src =('https://i.imgur.com/P7BNbII.png');GenA();GenB();">+</a></p>
+				<p style="font-size: 132px"><a href="#" style="text-decoration: none" onclick="document.getElementById('GenA').src =('https://i.imgur.com/P7BNbII.png');document.getElementById('GenB').src =('https://i.imgur.com/P7BNbII.png');GenA();GenB();">+</a></p>
 			</td>
 			<td>
 				<p align="center"><a href="#"><img id="GenB" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="this.src =('https://i.imgur.com/P7BNbII.png');GenB();"></a></p>	
@@ -3876,6 +3876,10 @@ p.help
 		if (targetTop[0]<0) targetTop[0]=0;
 		if (targetTop[1]<0) targetTop[1]=0;
 		
+		resultA = "";
+		resultB = "";
+		compatible = [];
+		
 		updateScore();
 		
 		if (document.getElementById("dataset").value == "average") pokemonlist = averagelist;
@@ -3887,7 +3891,9 @@ p.help
 		document.getElementById('ScoreA').innerHTML = "&nbsp;";
 		document.getElementById('ScoreB').innerHTML = "&nbsp;";
 		document.getElementById('DetailsB').innerHTML = "&nbsp;";
+		document.getElementById('total').innerHTML = "&nbsp;";
 		document.getElementById('fullScores').innerHTML = '';
+		
 	}
 	</script>
 	
@@ -3921,7 +3927,7 @@ p.help
 	<!-- FULL SCORES -->
 	<p id="fullScores" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.11.0<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.11.2<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
