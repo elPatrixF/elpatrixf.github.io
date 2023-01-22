@@ -3652,9 +3652,20 @@ function GenA()
 
 function GenB()
 {
-	resultB = compatible[rand(compatible.length)];
-	document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
-	document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
+	if (compatible.length>0)
+	{
+		resultB = compatible[rand(compatible.length)];
+		document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
+		document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
+	
+	}
+	else
+	{
+		resultB = "file=201.png;dex=0;name=Error!;base=0;elements=0;";
+		document.getElementById('GenB').src = "https://archives.bulbagarden.net/media/upload/8/81/LitGhost.png";
+		document.getElementById('ScoreB').innerText = "Please try again.";
+	
+	}
 	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
 }
 
@@ -3668,7 +3679,7 @@ function updateScore()
 </script>
 
 <style>
-p
+p,dialog
 {
     margin-bottom: 0px;
     margin-top: 0px;
@@ -3698,11 +3709,18 @@ p
 		</tr>
 	</table>
 	<p align="center" id="total">Total score: -/-</p>
-	<p align="right" style="font-size:8px;opacity:0.5;">Version 0.7.1</p>
+	<!-- <p align="center"><a href="#" onclick="document.getElementById('targetSettings').showModal()">[Change target score]</a></p> -->
+	
+	<dialog id="targetSettings">
+	<p>Please choose your new target score range:</p>
+	<button id="cancelTarget" onclick="document.getElementById('targetSettings').close();">Cancel</button>
+	<button id="confirmTarget" onclick="document.getElementById('targetSettings').close();setNewTargets();">OK</button>
+	</dialog>
+	
+	<p align="right" style="font-size:8px;opacity:0.5;">Version 0.7.2</p>
 	</div>
 
-<script>
-	
+<script>	
 	updateScore();
 </script>
 
