@@ -3673,6 +3673,7 @@ function SetB(i)
 	document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
 	document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
 	document.getElementById('DetailsB').innerHTML = '<a href=# onclick="whoB()">'+compatible.length + " pokémon</a> match the score conditions.";	
+	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
 }
 
 function GenB()
@@ -3729,8 +3730,9 @@ function whoB()
 
 function whatsThis()
 {
-	fulls = "<hr><p>What's this?:</p>";
+	fulls = "<hr><p>What's this?  <a  style='font-size: 12px'  href=\"#\" onclick=\'document.getElementById(\"fullScores\").innerHTML = \"\";\'>[close]</a><hr></p>";
 	fulls += "<p class='help'>This random pokemon generator will select a random pokemon on the left, then select a random pokemon on the right which matches the score range criteria.</p>";
+	fulls += "<p class='help'>Click on the plus sign on the Center, (or click on the left pokeball first, then on the right pokeball) to generate a pair of pokemon.</p>";
 	fulls += "<p class='help'>Score is based on how good a pokemon is good to be used as one half of a fusion. Going from 0 (worst) to 6 (best).</p>";
 	fulls += "<p class='help'>The first number determines how good a pokemon is as a base, and the second one determines how good its design elements are.";
 	fulls += "<p class='help'>For example Eevee will have a very high Base score (easy to make a good looking eevee fusion), but a pretty low Elements score (doesn't have many interesting features). ";
@@ -3748,11 +3750,11 @@ function whatsThis()
 function showCompatibleScores()
 {
 	fulls = "<hr>Pokemon which are compatible with "+getParameter(resultA,"name")+" (";
-	if (pokemonlist == averagelist) fulls += "Average dataset)<hr>" ;
-	if (pokemonlist == vialist) fulls += "Via dataset)<hr>";
-	if (pokemonlist == patlist) fulls += "Pat dataset)<hr>";
+	if (pokemonlist == averagelist) fulls += "Average dataset)" ;
+	if (pokemonlist == vialist) fulls += "Via dataset)";
+	if (pokemonlist == patlist) fulls += "Pat dataset)";
 	
-	fulls += "<table>";
+	fulls += '  <a style="font-size: 12px" href="#" onclick="document.getElementById(\'fullScores\').innerHTML = \'\';">[close]</a><hr><table>';
 	fulls += "<tr><th>dex#</th><th>Name</th><th>B</th><th>/</th><th>E</th></tr>";
 	
 	for(i=0;i<compatible.length;i++)
@@ -3771,11 +3773,11 @@ function showCompatibleScores()
 function showAllScores()
 {
 	fulls = "<hr>Full dataset scores (";
-	if (pokemonlist == averagelist) fulls += "Average)<hr>" ;
-	if (pokemonlist == vialist) fulls += "Via)<hr>";
-	if (pokemonlist == patlist) fulls += "Pat)<hr>";
+	if (pokemonlist == averagelist) fulls += "Average)" ;
+	if (pokemonlist == vialist) fulls += "Via)";
+	if (pokemonlist == patlist) fulls += "Pat)";
 	
-	fulls += "<table>";
+	fulls += '  <a style="font-size: 12px" href="#" onclick="document.getElementById(\'fullScores\').innerHTML = \'\';">[close]</a><hr><table>';
 	fulls += "<tr><th>dex#</th><th>Name</th><th>B / E</th></tr>";
 	
 	for(i=0;i<pokemonlist.length;i++)
@@ -3915,7 +3917,7 @@ p.help
 	<!-- FULL SCORES -->
 	<p id="fullScores" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.10.2<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.10.3<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
