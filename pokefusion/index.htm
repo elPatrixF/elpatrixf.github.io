@@ -3587,7 +3587,7 @@ var averagelist=["file=001.png;dex=1;name=Bulbasaur;base=1.5;elements=3.5;",
 
 var pokemonlist = averagelist;
 
-function urlParam(name, url) {
+/*function urlParam(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
     var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -3595,8 +3595,9 @@ function urlParam(name, url) {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+}*/
 
+//---------------
 function rand(max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * max);
@@ -3616,6 +3617,7 @@ function getElem(s)
 {
 	return getParameter(s,"elements")-0;
 }
+//---------------
 
 var compatible = [];
 
@@ -3625,7 +3627,7 @@ var targetTop    = [12,12];
 
 var resultA = "";
 var resultB = "";
-
+//---------------
 function populateB()
 {
 	compatible = [];
@@ -3642,6 +3644,17 @@ function populateB()
 		}
 	}
 }
+//---------------
+function SetA(i)
+{
+	resultA = pokemonlist[i];
+	document.getElementById('GenA').src = urlbase + getParameter(resultA,"file");
+	document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
+	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	document.getElementById('ScoreB').innerText = "...";
+	document.getElementById('DetailsB').innerText = "...";
+	populateB();
+}
 
 function GenA()
 {
@@ -3649,7 +3662,17 @@ function GenA()
 	document.getElementById('GenA').src = urlbase + getParameter(resultA,"file");
 	document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
 	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	document.getElementById('ScoreB').innerText = "...";
+	document.getElementById('DetailsB').innerText = "...";
 	populateB();
+}
+//---------------
+function SetB(i)
+{
+	resultB = compatible[i];
+	document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
+	document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
+	document.getElementById('DetailsB').innerHTML = '<a href=# onclick="whoB()">'+compatible.length + " pokémon</a> match the score conditions.";	
 }
 
 function GenB()
@@ -3659,6 +3682,7 @@ function GenB()
 		resultB = compatible[rand(compatible.length)];
 		document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
 		document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
+		document.getElementById('DetailsB').innerHTML = '<a href=# onclick="whoB()">'+compatible.length + " pokémon</a> match the score conditions.";
 	
 	}
 	else
@@ -3666,18 +3690,108 @@ function GenB()
 		resultB = "file=201.png;dex=0;name=Error!;base=0;elements=0;";
 		document.getElementById('GenB').src = "https://archives.bulbagarden.net/media/upload/8/81/LitGhost.png";
 		document.getElementById('ScoreB').innerText = "Please try again.";
+		document.getElementById('DetailsB').innerText = "No pokémon match the score conditions.";
 	
 	}
 	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
 }
+//---------------
 
 function updateScore()
 {
-	if ((targetBottom[0]==targetTop[0]) & (targetBottom[1]==targetTop[1]))
+	if ((targetTop[0]+targetTop[1]==24)&(targetBottom[0]+targetBottom[1]==0))
+		document.getElementById('target').innerText = "Free for all.";
+	else if ((targetBottom[0]==targetTop[0]) & (targetBottom[1]==targetTop[1]))
 		document.getElementById('target').innerText = "Target score: "+targetTop[0]+"/"+targetTop[1];
 	else
 	document.getElementById('target').innerText = "Target score: "+targetBottom[0]+"/"+targetBottom[1]+" to "+targetTop[0]+"/"+targetTop[1];
 }
+//---------------
+
+function whoB()
+{
+/*	who = "The pokémon ";
+	if (compatible.length==1) who += "is ";
+	else who +="are ";
+	for(i=0;i<compatible.length;i++)
+	{
+		if (i==compatible.length-1) who += "and ";
+		who += getParameter(compatible[i],"name");
+		if (i<compatible.length-1) who += ", ";
+		else who += ".";
+	}
+	window.alert(who);
+	*/
+	showCompatibleScores();
+}
+
+//---------------
+
+function whatsThis()
+{
+	fulls = "<hr><p>What's this?:</p>";
+	fulls += "<p class='help'>This random pokemon generator will select a random pokemon on the left, then select a random pokemon on the right which matches the score range criteria.</p>";
+	fulls += "<p class='help'>Score is based on how good a pokemon is good to be used as one half of a fusion. Going from 0 (worst) to 6 (best).</p>";
+	fulls += "<p class='help'>The first number determines how good a pokemon is as a base, and the second one determines how good its design elements are.";
+	fulls += "<p class='help'>For example Eevee will have a very high Base score (easy to make a good looking eevee fusion), but a pretty low Elements score (doesn't have many interesting features). ";
+	fulls += "<br>On the other hand Cosmog is just a floating cloud, but it has really cute colors and patterns which might make <i>other</i> pokemon look cute. ";
+	fulls += "<br>All these scores are subjective and based purely on our own taste. In this example, Eevee would have a score of 6/2, and Cosmog 0/5.</p>"
+	fulls += "<p class='help'>The main motivation behind this randomizer was to generate pokemon fusions that are Easier to draw, and to avoid having to re-roll through boring stuff a hundred times like Voltorb/Diglett, before we're able to get a somewhat good looking fusion to try. "
+	fulls += "<br>If you're up to a challenge, you can also change the criteria for the total score required to be considered a match, so that instead of making it easier, you can make it <i>harder</i>.</p>"
+	fulls += "<p class='help'>This generator includes all 1008 pokemon, with all the relevant formes, including megas, regional variants, gigantamax formes, etc. Ideally there's one entry per physical design. ";
+	fulls += "<br>It does not include additional formes for Alcremie, Furfrou, Vivillon, Arceus, Rotom, and other pokemon with more than 4 forms. In those cases you can just choose which forme you use.</p>"	
+	fulls += "<p class='help'>Hope you enjoy!</p>"
+	fulls += '<hr><a href="#" onclick="document.getElementById(\'fullScores\').innerHTML = \'\';">[Close]</a><hr>';
+	document.getElementById("fullScores").innerHTML = fulls;
+}
+
+function showCompatibleScores()
+{
+	fulls = "<hr>Pokemon which are compatible with "+getParameter(resultA,"name")+" (";
+	if (pokemonlist == averagelist) fulls += "Average dataset)<hr>" ;
+	if (pokemonlist == vialist) fulls += "Via dataset)<hr>";
+	if (pokemonlist == patlist) fulls += "Pat dataset)<hr>";
+	
+	fulls += "<table>";
+	fulls += "<tr><th>dex#</th><th>Name</th><th>B</th><th>/</th><th>E</th></tr>";
+	
+	for(i=0;i<compatible.length;i++)
+	{
+		//<img visibility=hidden src="'+urlbase+getParameter(compatible[i],"file")+'" width=128>
+		fulls += '<tr><td> #'+getParameter(compatible[i],"dex")+'</td><td><a href="#" onclick="SetB('+i+');">'+getParameter(compatible[i],"name")+'</a></td><td align="center">';
+		fulls += getParameter(compatible[i],"base")+" / "+getParameter(compatible[i],"elements")+"</td></tr> ";
+	}
+	
+	fulls += "</table>";
+	fulls += '<hr><a href="#" onclick="document.getElementById(\'fullScores\').innerHTML = \'\';">[Close]</a><hr>';
+	
+	document.getElementById("fullScores").innerHTML = fulls;
+}
+
+function showAllScores()
+{
+	fulls = "<hr>Full dataset scores (";
+	if (pokemonlist == averagelist) fulls += "Average)<hr>" ;
+	if (pokemonlist == vialist) fulls += "Via)<hr>";
+	if (pokemonlist == patlist) fulls += "Pat)<hr>";
+	
+	fulls += "<table>";
+	fulls += "<tr><th>dex#</th><th>Name</th><th>B / E</th></tr>";
+	
+	for(i=0;i<pokemonlist.length;i++)
+	{
+		//<img visibility=hidden src="'+urlbase+getParameter(pokemonlist[i],"file")+'" width=128>
+		fulls += '<tr><td> #'+getParameter(pokemonlist[i],"dex")+'</td><td><a href="#" onclick="SetA('+i+');">'+getParameter(pokemonlist[i],"name")+'</a></td><td align="center">';
+		fulls += getParameter(pokemonlist[i],"base")+" / "+getParameter(pokemonlist[i],"elements")+"</td></tr> ";
+	}
+	
+	fulls += "</table>";
+	fulls += '<hr><a href="#" onclick="document.getElementById(\'fullScores\').innerHTML = \'\';">[Close]</a><hr>';
+	
+	document.getElementById("fullScores").innerHTML = fulls;
+}
+
+//---------------
 </script>
 
 <style>
@@ -3687,6 +3801,12 @@ p,dialog
     margin-top: 0px;
     font: 24px Trebuchet MS,sans-serif;
 }
+p.help
+{
+	margin-bottom: 4px;
+    margin-top: 16px;
+    font: 16px Trebuchet MS,sans-serif;
+}
 #total
 {
 	font: bold 36px Trebuchet MS,sans-serif;
@@ -3695,11 +3815,11 @@ p,dialog
 
 <div class="random_selectors" align="center">
 	<p align="center" id="target">Target score: -/- to -/-</p>
-	<p align="center" style="font-size:12px"><a href="#" onclick="openTargetSettings();">[Change settings!]</a></p>
+	<p align="center" style="font-size:12px"><a href="#" onclick="openTargetSettings();">[Change settings]</a> - <a href="#" onclick="showAllScores();">[Display all data]</a> - <a href="#" onclick="whatsThis();">[Whats this?]</a></p>
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<td>
-				<p align="center"><a href="#"><img id="GenA" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="this.src =('https://i.imgur.com/P7BNbII.png');GenA();"></a></p>	
+				<p align="center"><a href="#"><img id="GenA" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="document.getElementById('GenB').src =('https://i.imgur.com/P7BNbII.png');this.src =('https://i.imgur.com/P7BNbII.png');GenA();"></a></p>	
 				<p align="center" id="ScoreA">...</p>
 			</td>
 			<td>
@@ -3712,6 +3832,7 @@ p,dialog
 		</tr>
 	</table>
 	<p align="center" id="total">Total score: -/-</p>
+	<p align="center" style="font-size:12px;opacity:0.6;" id="DetailsB">...</p>
 	
 	<script>
 	function openTargetSettings()
@@ -3738,11 +3859,29 @@ p,dialog
 		if (targetTop[0]-0<targetBottom[0]-0) {targetTop[0]=targetBottom[0];console.log("Base top lower than bottom");}
 		if (targetTop[1]-0<targetBottom[1]-0) {targetTop[1]=targetBottom[1];console.log("Elements top lower than bottom");}
 		
+		//Margins
+		if (targetBottom[0]>12) targetBottom[0]=12;
+		if (targetBottom[1]>12) targetBottom[1]=12;
+		if (targetTop[0]>12) targetTop[0]=12;
+		if (targetTop[1]>12) targetTop[1]=12;
+		//Margins
+		if (targetBottom[0]<0) targetBottom[0]=0;
+		if (targetBottom[1]<0) targetBottom[1]=0;
+		if (targetTop[0]<0) targetTop[0]=0;
+		if (targetTop[1]<0) targetTop[1]=0;
+		
 		updateScore();
 		
 		if (document.getElementById("dataset").value == "average") pokemonlist = averagelist;
 		if (document.getElementById("dataset").value == "via") pokemonlist = vialist;
 		if (document.getElementById("dataset").value == "pat") pokemonlist = patlist;
+		
+		document.getElementById('GenA').src = "https://i.imgur.com/P7BNbII.png";
+		document.getElementById('GenB').src = "https://i.imgur.com/P7BNbII.png";
+		document.getElementById('ScoreA').innerText = "...";
+		document.getElementById('ScoreB').innerText = "...";
+		document.getElementById('DetailsB').innerText = "...";
+		document.getElementById('fullScores').innerHTML = '';
 	}
 	</script>
 	
@@ -3773,7 +3912,10 @@ p,dialog
 	</p>
 	</dialog>
 	
-	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.8.4<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<!-- FULL SCORES -->
+	<p id="fullScores" align="center"></p>
+	
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.10.2<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
