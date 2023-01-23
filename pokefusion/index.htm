@@ -3632,7 +3632,7 @@ function populateB()
 	{
 		base     = getBase(pokemonlist[i]) + baseOG;
 		elements = getElem(pokemonlist[i]) + elementsOG;
-		if ((base>=targetBottom[0])&(base<=targetTop[0])&(elements>=targetBottom[1])&(elements<=targetTop[1]))
+		if ((pokemonlist[i]!=resultA)&&((base>=targetBottom[0])&(base<=targetTop[0])&(elements>=targetBottom[1])&(elements<=targetTop[1])))
 		{
 			compatible.push(pokemonlist[i]);
 		}
@@ -3646,6 +3646,8 @@ function SetA(i)
 	document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
 	//document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
 	document.getElementById('total').innerHTML = "&nbsp;";
+	resultB= "";
+	document.getElementById("swapbutton").style.opacity = 0;
 	document.getElementById('ScoreB').innerHTML = "&nbsp;";
 	document.getElementById('DetailsB').innerHTML = "&nbsp;";
 	document.getElementById('GenB').src = "https://i.imgur.com/P7BNbII.png";
@@ -3658,6 +3660,8 @@ function GenA()
 	document.getElementById('GenA').src = urlbase + getParameter(resultA,"file");
 	document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
 	//document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	resultB= "";
+	document.getElementById("swapbutton").style.opacity = 0;
 	document.getElementById('total').innerHTML = "&nbsp;";
 	document.getElementById('ScoreB').innerHTML = "&nbsp;";
 	document.getElementById('DetailsB').innerHTML = "&nbsp;";
@@ -3672,6 +3676,24 @@ function SetB(i)
 	document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
 	document.getElementById('DetailsB').innerHTML = '<a href=# onclick="whoB()">'+compatible.length + " pokémon</a> match the score conditions.";	
 	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	document.getElementById("swapbutton").style.opacity = 0.75;
+}
+
+function swap()
+{
+	if (resultB!="")
+	{
+		t = resultA;
+		resultA = resultB;
+		resultB = t;
+		populateB();
+		document.getElementById('GenA').src = urlbase + getParameter(resultA,"file");
+		document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
+		document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
+		document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
+		document.getElementById('DetailsB').innerHTML = '<a href=# onclick="whoB()">'+compatible.length + " pokémon</a> match the score conditions.";	
+		document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	}
 }
 
 function GenB()
@@ -3682,11 +3704,12 @@ function GenB()
 		document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
 		document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
 		document.getElementById('DetailsB').innerHTML = '<a href=# onclick="whoB()">'+compatible.length + " pokémon</a> match the score conditions.";
+		document.getElementById("swapbutton").style.opacity = 0.75;
 	
 	}
 	else
 	{
-		resultB = "file=201.png;dex=0;name=Error!;base=0;elements=0;";
+		resultB = "";
 		document.getElementById('GenB').src = "LitGhost.png";
 		document.getElementById('ScoreB').innerText = "Please try again.";
 		document.getElementById('DetailsB').innerText = "No pokémon match the score conditions.";
@@ -3823,7 +3846,9 @@ p.help
 				<p align="center" id="ScoreA">&nbsp;</p>
 			</td>
 			<td>
+				<p style="font-size: 132px;opacity: 0">?</p>
 				<p style="font-size: 132px"><a href="#" style="text-decoration: none" onclick="document.getElementById('GenA').src =('https://i.imgur.com/P7BNbII.png');document.getElementById('GenB').src =('https://i.imgur.com/P7BNbII.png');GenA();GenB();">+</a></p>
+				<p style="font-size: 132px;opacity: 0" id="swapbutton"><a href="#" style="text-decoration: none" onclick="swap();">«</a></p>
 			</td>
 			<td>
 				<p align="center"><a href="#"><img id="GenB" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=475px onclick="this.src =('https://i.imgur.com/P7BNbII.png');GenB();"></a></p>	
@@ -3873,6 +3898,7 @@ p.help
 		resultA = "";
 		resultB = "";
 		compatible = [];
+		document.getElementById("swapbutton").style.opacity = 0;
 		
 		updateScore();
 		
@@ -3921,7 +3947,7 @@ p.help
 	<!-- FULL SCORES -->
 	<p id="fullScores" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.12.1<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.12.2<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
