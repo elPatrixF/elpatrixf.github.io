@@ -3648,6 +3648,7 @@ function SetA(i)
 	document.getElementById('total').innerHTML = "&nbsp;";
 	resultB= "";
 	document.getElementById("swapbutton").style.opacity = 0;
+	document.getElementById('fullScores').innerHTML = '';
 	document.getElementById('ScoreB').innerHTML = "&nbsp;";
 	document.getElementById('DetailsB').innerHTML = "&nbsp;";
 	document.getElementById('GenB').src = "https://i.imgur.com/P7BNbII.png";
@@ -3662,6 +3663,7 @@ function GenA()
 	//document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
 	resultB= "";
 	document.getElementById("swapbutton").style.opacity = 0;
+	document.getElementById('fullScores').innerHTML = '';
 	document.getElementById('total').innerHTML = "&nbsp;";
 	document.getElementById('ScoreB').innerHTML = "&nbsp;";
 	document.getElementById('DetailsB').innerHTML = "&nbsp;";
@@ -3687,6 +3689,7 @@ function swap()
 		resultA = resultB;
 		resultB = t;
 		populateB();
+		document.getElementById('fullScores').innerHTML = '';
 		document.getElementById('GenA').src = urlbase + getParameter(resultA,"file");
 		document.getElementById('ScoreA').innerText = getParameter(resultA,"name") + ": " + getBase(resultA)+"/"+getElem(resultA);
 		document.getElementById('GenB').src = urlbase + getParameter(resultB,"file");
@@ -3947,7 +3950,7 @@ p.help
 	<!-- FULL SCORES -->
 	<p id="fullScores" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.12.2<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.12.3<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
