@@ -3918,6 +3918,21 @@ p.help
 		document.getElementById('fullScores').innerHTML = '';
 		
 	}
+	
+	function freeForAll()
+	{
+		document.getElementById('base_bottom').value = 0;
+		document.getElementById('elem_bottom').value = 0;
+		document.getElementById('base_top').value = 12;
+		document.getElementById('elem_top').value = 12;
+	}
+	function setDefaults()
+	{
+		document.getElementById('base_bottom').value = 5;
+		document.getElementById('elem_bottom').value = 5;
+		document.getElementById('base_top').value = 12;
+		document.getElementById('elem_top').value = 12;
+	}
 	</script>
 	
 	<dialog id="targetSettings" style="font-size:64px">
@@ -3935,14 +3950,19 @@ p.help
 	<p style="font-size:24px">Please choose your dataset:</p>
 	<p>
 		<select style="font-size:24px" id="dataset">
-          <option value="average">Average Scores</option>
-          <option value="via">Via Scores</option>
+          <option value="average">Averaged Scores</option>
           <option value="pat">Pat Scores</option>
+	<!--  <option value="via">Via Scores</option>    Turned into secret option :3>   -->
         </select>
 	</p>
 	<br>
 	<p>
-		<button style="font-size:24px" id="cancelTarget" onclick="document.getElementById('targetSettings').close();">Cancel</button>
+		<button style="font-size:24px" onclick="setDefaults();">Reset to defaults</button> 
+		<button style="font-size:24px" onclick="freeForAll();">Free for all</button>
+	</p>
+	<br>
+	<p>
+		<button style="font-size:24px" id="cancelTarget" onclick="document.getElementById('targetSettings').close();">Cancel</button> 
 		<button style="font-size:24px" id="confirmTarget" onclick="document.getElementById('targetSettings').close();setNewTargets();">OK</button>
 	</p>
 	</dialog>
@@ -3950,7 +3970,7 @@ p.help
 	<!-- FULL SCORES -->
 	<p id="fullScores" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.12.3<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.12.4<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
