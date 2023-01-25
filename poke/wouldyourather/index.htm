@@ -49,6 +49,7 @@ var votes = 0;
 var started = false;
 var finished = false;
 shuffle(pokemonlist);
+shuffle(pokemonlist);
 
 function SetA(i)
 {
@@ -253,10 +254,10 @@ p.help
 	[<a href=# onclick="difficulty( 4.5,'half the pokemon (the better ones)');" title="Combined score higher than 4.5">Top half</a>], 
 	[<a href=# onclick="difficulty(   0,'all pokemon available');" title="All pokemon no matter their score">All pokemon</a>], 
 	[<a href=# onclick="difficulty(-4.5,'half the pokemon (the worse ones)');" title="Combined score lower than 4.5">Hard mode</a>], 
-	[<a href=# onclick="difficulty(  -2,'the most anti-furbait pokemon :)');" title="Combined score lower than 2"><b>Anti-furbait</b></a>]</p>
+	[<a href=# onclick="difficulty(  -2,'the most anti-furbait pokemon :)');" title="Combined score lower than 2"><b>Anti-furbait</b></a>]
 	
-	<br><p style="font-size: 12px"><b>Warning!</b> All of these except furbait, extended, and anti-furbait, probably require over an hour to complete (Because of how many pokemon there are to choose from).<br>If you want a better way to find out your favorite pokemon, <a href="https://www.dragonflycave.com/favorite.html">click here!</a>.<br>Also the data is grabbed automatically based on score
-	tresholds from <a href="https://elpatrixf.com/pokefusion/">my previous experiment</a>.</p>
+	<br><span style="font-size: 12px"><b>Warning!</b> All of these except furbait, extended, and anti-furbait, probably require over an hour to complete (Because of how many pokemon there are to choose from).<br>If you want a better way to find out your favorite pokemon, <a href="https://www.dragonflycave.com/favorite.html">click here!</a>.<br>Also the data is grabbed automatically based on score
+	tresholds from <a href="https://elpatrixf.com/pokefusion/">my previous experiment</a>.</span></p>
 	
 	<p align="center" id="round"></p>
 	<p align="center" id="target">&nbsp;</p>
@@ -279,7 +280,7 @@ p.help
 	<p align="center" style="font-size:16px;opacity: 0.75;">[<a href="#" onclick="showscores()">Show results</a>] - [<a href="#" onclick="showremaining()">Show remaining pokemon</a>]</p>
 	<p id="bottom" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.4;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a>. Version 0.2.1<br>Other projects: <a href="https://elpatrixf.com/pokefusion/">[Pokefusion Generator]</a> / <a href="https://elpatrixf.com/poke/smashorpass">[Smash or Pass]</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.4;"><b><a href=".">[Start Over]</a></b><br>By @<a href="https://twitter.com/elpatrixf">elpatrixf</a>. Version 0.2.2<br>Other projects: <a href="https://elpatrixf.com/pokefusion/">[Pokefusion Generator]</a> / <a href="https://elpatrixf.com/poke/smashorpass">[Smash or Pass]</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	</p>
 	</div>
 
