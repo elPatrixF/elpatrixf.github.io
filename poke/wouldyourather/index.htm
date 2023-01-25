@@ -76,6 +76,7 @@ function refresh()
 	document.getElementById('ScoreB').innerText = getParameter(resultB,"name");
 	if (round>1) document.getElementById('round').innerHTML = "Round " + round;
 	else document.getElementById('round').innerHTML = "&nbsp;";
+	document.getElementById("bottom").innerHTML = "";
 }
 
 function winner()
@@ -120,7 +121,7 @@ function chooseA()
 		votes++;
 		document.getElementById('DetailsB').innerHTML = "You just chose "+getParameter(resultA,"name")+" over "+getParameter(resultB,"name");
 		accepted.push(resultA);
-		rejected.push(resultB);
+		rejected.push(resultB+"rival="+getParameter(resultA,"name")+";round="+round+";");
 		popmore();
 		if (!(finished)) document.getElementById('DetailsB').innerHTML += "<br>" +pokemonlist.length+" pokemon left this round."
 	}
@@ -132,8 +133,8 @@ function chooseB()
 	{
 		votes++;
 		document.getElementById('DetailsB').innerHTML = "You just chose "+getParameter(resultB,"name")+" over "+getParameter(resultA,"name");
-		rejected.push(resultA);
 		accepted.push(resultB);
+		rejected.push(resultA+"rival="+getParameter(resultB,"name")+";round="+round+";");
 		popmore();
 		if (!(finished)) document.getElementById('DetailsB').innerHTML += "<br>" +pokemonlist.length+" pokemon left this round."
 	}
@@ -171,6 +172,56 @@ function difficulty(i,st)
 	started = true;
 }
 
+function showscores()
+{
+	{
+		results = "<hr><table><tr><td style='vertical-align: top;'><p><b>ELIMINATED POKEMON:</b><br>The "+rejected.length+" losers, from last to second.</p>";
+		roundcount = 0;
+		for(i=0;i<rejected.length;i++)
+		{
+			if (getParameter(rejected[i],"round")>roundcount)
+			{
+				roundcount++
+				results +="<hr><h3><u>Round "+roundcount+"</u></h3>";
+			}
+			results += "#<b>"+getParameter(rejected[i],"dex")+" "+getParameter(rejected[i],"name");
+			if (getParameter(rejected[i],"rival")==getParameter(rejected[i],"file")) results += "</b> got disqualified I guess<br>";
+			else results += "</b> lost to <b>"+getParameter(rejected[i],"rival")+"</b><br>";
+		}
+		results += "</td></tr></table>";
+		results += '<hr><a href="#" onclick="document.getElementById(\'bottom\').innerHTML = \'\';">[Close]</a><hr>';
+		document.getElementById("bottom").innerHTML = results;
+	}
+}
+
+function showremaining()
+{
+	if (started)
+	{
+		results = "<hr><table><tr><td style='vertical-align: top;'><p align='center'><b>Remaining pokemon:</b><br>There's "+pokemonlist.length+" pokemon yet in Round "+round+".</p><p align='center'>";
+		widthP = 70;
+		if ((pokemonlist.length) < 250) widthP = 120;
+		if ((pokemonlist.length) < 41) widthP = 240;
+		if ((pokemonlist.length) < 3) widthP = 475;
+		for(i=0;i<pokemonlist.length;i++)
+		{
+			//results += "#<b>"+getParameter(pokemonlist[i],"dex")+" "+getParameter(pokemonlist[i],"name")+"</b> <br>";
+			results += "<img src='"+urlbase+getParameter(pokemonlist[i],"file")+"' title='#"+getParameter(pokemonlist[i],"dex")+" "+getParameter(pokemonlist[i],"name")+"' width='"+widthP+"'>";
+		}
+		results += "</p><hr><p align='center'>";
+		for(i=0;i<pokemonlist.length;i++)
+		{
+			results += "<b>"+getParameter(pokemonlist[i],"name")+"</b>";
+			if (i+2<pokemonlist.length) results += ", ";
+			else if (i+1<pokemonlist.length) results += ", and ";
+			else results += ". ";
+		}
+		results += "</p></td></tr></table>";	
+		results += '<hr><a href="#" onclick="document.getElementById(\'bottom\').innerHTML = \'\';">[Close]</a><hr>';
+		document.getElementById("bottom").innerHTML = results;
+	}
+}
+
 </script>
 
 <style>
@@ -195,8 +246,7 @@ p.help
 <div class="random_selectors" align="center">
 	
 	<p align="center" id="difficultyBar" style="font-size: 16px;"><span style="font-size: 36px;"><b>Choose a difficulty:</b></span><br>
-	<span style="font-size: 12px"><b>Warning!</b> All of these except furbait, extended, and anti-furbait, probably require over an hour to complete (Because of how many pokemon there are to choose from).<br>If you want a better way to find out your favorite pokemon, <a href="https://www.dragonflycave.com/favorite.html">click here!</a>.<br>Also the data is grabbed automatically based on score
-	tresholds from <a href="https://elpatrixf.com/pokefusion/">my previous experiment</a>.</span><br><br>
+	
 	[<a href=# onclick="difficulty( 8.5,'furbait pokemon only');" title="Combined score higher than 8.5"><b>Furbait</b></a>], 
 	[<a href=# onclick="difficulty(   7,'furbait (loosely) pokemon only');" title="Combined score higher than 7"><b>Extended</b></a>], 
 	[<a href=# onclick="difficulty( 6.5,'generally good looking pokemon');" title="Combined score higher than 6.5">General</a>], 
@@ -204,6 +254,10 @@ p.help
 	[<a href=# onclick="difficulty(   0,'all pokemon available');" title="All pokemon no matter their score">All pokemon</a>], 
 	[<a href=# onclick="difficulty(-4.5,'half the pokemon (the worse ones)');" title="Combined score lower than 4.5">Hard mode</a>], 
 	[<a href=# onclick="difficulty(  -2,'the most anti-furbait pokemon :)');" title="Combined score lower than 2"><b>Anti-furbait</b></a>]</p>
+	
+	<br><p style="font-size: 12px"><b>Warning!</b> All of these except furbait, extended, and anti-furbait, probably require over an hour to complete (Because of how many pokemon there are to choose from).<br>If you want a better way to find out your favorite pokemon, <a href="https://www.dragonflycave.com/favorite.html">click here!</a>.<br>Also the data is grabbed automatically based on score
+	tresholds from <a href="https://elpatrixf.com/pokefusion/">my previous experiment</a>.</p>
+	
 	<p align="center" id="round"></p>
 	<p align="center" id="target">&nbsp;</p>
 	<table border="0" cellspacing="0" cellpadding="0" id="bigtable">
@@ -222,15 +276,13 @@ p.help
 		</tr>
 	</table>
 	<p align="center" style="font-size:12px;opacity:0.6;" id="DetailsB">You have to choose one.</p>
+	<p align="center" style="font-size:16px;opacity: 0.75;">[<a href="#" onclick="showscores()">Show results</a>] - [<a href="#" onclick="showremaining()">Show remaining pokemon</a>]</p>
 	<p id="bottom" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.4;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a>. Version 0.1.4<br>Other projects: <a href="https://elpatrixf.com/pokefusion/">[Pokefusion Generator]</a> / <a href="https://elpatrixf.com/poke/smashorpass">[Smash or Pass]</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.4;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a>. Version 0.2.1<br>Other projects: <a href="https://elpatrixf.com/pokefusion/">[Pokefusion Generator]</a> / <a href="https://elpatrixf.com/poke/smashorpass">[Smash or Pass]</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	</p>
 	</div>
 
-<script>	
-	updateScore();
-</script>
 
 </body>
 </html>
