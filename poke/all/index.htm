@@ -1,0 +1,114 @@
+<html>
+<head>
+<title>Show all Pokemon</title>	
+<meta property="og:title" content="Show all pokemon">
+<meta property="og:description" content="Computer show me all the pokemon formes.">
+<meta property="og:image" content="https://cdn.discordapp.com/emojis/996157223581515806.webp">
+</head>
+
+<!-- Hi mom :3> -->
+
+<body>
+<style>
+
+</style>
+<script src="../scores.js"></script>
+<script>
+
+
+var pokemonlist = averagelist;
+
+/*function urlParam(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}*/
+
+//---------------
+function rand(max) {
+  max = Math.floor(max);
+  return Math.floor(Math.random() * max);
+}
+
+function getParameter(s,p)
+{
+	result = s.substring(s.search(p)+p.length+1,s.length);
+	result = result.substring(0,result.search(";"));
+	return result;
+}
+function getBase(s)
+{
+	return getParameter(s,"base")-0;
+}
+function getElem(s)
+{
+	return getParameter(s,"elements")-0;
+}
+
+//---------------
+
+urlbase = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
+
+function allPokemon()
+{
+	fulls = '<div class="grid">';
+	for(i=0;i<pokemonlist.length;i++)
+	{
+		
+		fulls += '<div class="square"><table><tr><td><a href="'+urlbase+getParameter(pokemonlist[i],"file")+'"><img alt="'+getParameter(pokemonlist[i],"name")+'" alt="'+getParameter(pokemonlist[i],"name")+'" src="'+urlbase+getParameter(pokemonlist[i],"file")+'"></a></td></tr><tr><td>#'+getParameter(pokemonlist[i],"dex")+' '+getParameter(pokemonlist[i],"name")+'</td></tr></table></div>';
+	}
+	
+	fulls += "</div>";
+	
+	document.getElementById("fullScores").innerHTML = fulls;
+}
+
+//---------------
+</script>
+
+<style>
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.square {
+  aspect-ratio: 1/ 1;
+  display: flex;
+  align-items: center;
+}
+
+.square img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+
+p,table
+{
+	align-items: center;
+	text-align: center;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font: 18px Trebuchet MS,sans-serif;
+}
+
+</style>
+
+<div class="random_selectors" align="center">
+	<p align="center" id="target">All pokemon!</p><hr>
+	<p id="fullScores" align="center"></p>
+	</div>
+
+<script>	
+	allPokemon();
+</script>
+
+</body>
+</html>
