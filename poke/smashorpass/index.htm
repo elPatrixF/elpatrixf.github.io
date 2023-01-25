@@ -59,7 +59,7 @@ var finished = false;
 
 enumerate(pokemonlist);
 pokemonlist.reverse();
-//shuffle(pokemonlist);
+
 
 function refresh()
 {
@@ -101,6 +101,7 @@ function pass()
 	else
 	{
 		started = true;
+		shuffle(pokemonlist);
 		shuffle(pokemonlist);
 		current = pokemonlist.pop();
 		
@@ -227,7 +228,7 @@ p.help
 	<p align="center" style="font-size:16px;opacity: 0.75;">[<a href="#" onclick="showscores()">Show results</a>]</p>
 	<p id="bottom" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.4;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a>. Version 0.1.1<br>Other projects: <a href="https://elpatrixf.com/pokefusion/">[Pokefusion Generator]</a> / <a href="https://elpatrixf.com/poke/wouldyourather">[Would you rather?]</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<p align="right" style="font-size:12px;opacity:0.4;"><b><a href=".">[Start Over]</a></b><br>By @<a href="https://twitter.com/elpatrixf">elpatrixf</a>. Version 0.1.2<br>Other projects: <a href="https://elpatrixf.com/pokefusion/">[Pokefusion Generator]</a> / <a href="https://elpatrixf.com/poke/wouldyourather">[Would you rather?]</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	</p>
 </div>
 
