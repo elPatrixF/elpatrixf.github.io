@@ -1,0 +1,236 @@
+<html>
+<head>
+<title>SMASH or PASS.</title>	
+<meta property="og:title" content="Pokemon Smash or Pass">
+<meta property="og:description" content="All 1008 pokemon, with all their formes.">
+<meta property="og:image" content="https://cdn.discordapp.com/emojis/996157223581515806.webp">
+</head>
+
+<!-- Hi mom :3> -->
+
+<body>
+<style>
+
+</style>
+<script src="../scores.js"></script>
+
+<script>
+
+var pokemonlist = averagelist;
+
+var smashed = [];
+var passed = [];
+
+//---------------
+function rand(max) {
+  max = Math.floor(max);
+  return Math.floor(Math.random() * max);
+}
+
+function getParameter(s,p)
+{
+	result = s.substring(s.search(p)+p.length+1,s.length);
+	result = result.substring(0,result.search(";"));
+	return result;
+}
+
+function shuffle(array)
+{
+	return array.sort(() => Math.random() - 0.5);
+}
+
+function enumerate(target)
+{
+	for(i=0;i<pokemonlist.length;i++)
+	{
+		pokemonlist[i] = "order="+("0000"+i).substr(-4)+";"+pokemonlist[i];
+	}
+}
+
+//---------------
+
+urlbase = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/";
+
+var current = "";
+var votes = 0;
+
+var started = false;
+var finished = false;
+
+enumerate(pokemonlist);
+pokemonlist.reverse();
+//shuffle(pokemonlist);
+
+function refresh()
+{
+	document.getElementById('current').src = "../ball.png";
+	document.getElementById('current').src = urlbase + getParameter(current,"file");
+	document.getElementById('currentName').innerText = "#"+getParameter(current,"dex")+" "+getParameter(current,"name");
+	
+	document.getElementById('remaining').innerText = votes+"/"+(pokemonlist.length+votes);
+	document.getElementById('Npassed').innerText = passed.length;
+	document.getElementById('Nsmashed').innerText = smashed.length;
+	document.getElementById("bottom").innerHTML = "";
+}
+
+function complete()
+{
+	document.getElementById('current').src = "../ball.png";
+	document.getElementById('currentName').innerText = "Finished!!!";
+	
+	document.getElementById('remaining').innerText = votes+"/"+(pokemonlist.length+votes);
+	document.getElementById('Npassed').innerText = passed.length;
+	document.getElementById('Nsmashed').innerText = smashed.length;
+}
+
+function pass()
+{
+	if (started)
+	{
+		votes++;
+		passed.push(current);
+		if (pokemonlist.length>0) current = pokemonlist.pop();
+		else
+		{	
+			finished = true;
+			complete();
+			showscores();
+		}
+		if (!finished) refresh();
+	}
+	else
+	{
+		started = true;
+		shuffle(pokemonlist);
+		current = pokemonlist.pop();
+		
+		document.getElementById('passButton').src = "pass.png";
+		document.getElementById('smashButton').src = "smash.png";
+		refresh();
+	}
+}
+
+function smash()
+{
+	if ((started) & (!finished))
+	{
+		votes++;
+		smashed.push(current);
+		if (pokemonlist.length>0) current = pokemonlist.pop();
+		else
+		{	
+			finished = true;
+			complete();
+			showscores();
+		}
+		if (!finished) refresh();
+	}
+	else
+	{
+		started = true;
+		current = pokemonlist.pop();
+		
+		document.getElementById('passButton').src = "pass.png";
+		document.getElementById('smashButton').src = "smash.png";
+		refresh();
+	}
+}
+
+
+window.onkeyup = function(e) {
+    var key = e.keyCode ? e.keyCode : e.which;
+    if (key == 37) pass();
+    else if (key == 39) smash();    
+}
+
+//---------------
+//start
+
+function prune(target)
+{
+	newlist = [];
+	for(i=0;i<pokemonlist.length;i++)
+	{
+		score = (getParameter(pokemonlist[i],"base")-0) + (getParameter(pokemonlist[i],"elements")-0);
+		if (target<0) score = score*-1;
+		if (score >= target) newlist.push(pokemonlist[i]);
+	}
+	pokemonlist = newlist;
+}
+
+function megasmash()
+{
+	for(i=0;i<1150;i++) pokemonlist.pop();
+}
+
+function showscores()
+{
+	{
+		results = "<hr><table><tr><td style='vertical-align: top;'><p><b>PASSED:</b><br>You passed on "+passed.length+" pokemon.</p><hr>";
+		for(i=0;i<passed.length;i++)
+		{
+			results += "<br>#"+getParameter(passed[i],"dex")+" "+getParameter(passed[i],"name");
+		}
+		results += "</td><td style='vertical-align: top;'><p><b>SMASHED:</b><br>You smashed "+smashed.length+" pokemon.</p><hr>";
+		for(i=0;i<smashed.length;i++)
+		{
+			results += "<br>#"+getParameter(smashed[i],"dex")+" "+getParameter(smashed[i],"name");
+		}
+		results += "</td></tr></table>";
+	}
+	document.getElementById("bottom").innerHTML = results;
+}
+
+
+</script>
+
+<style>
+p,dialog
+{
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font: 24px Trebuchet MS,sans-serif;
+}
+p.help
+{
+	margin-bottom: 4px;
+    margin-top: 16px;
+    font: 16px Trebuchet MS,sans-serif;
+}
+#total
+{
+	font: bold 36px Trebuchet MS,sans-serif;
+}
+</style>
+
+<div class="random_selectors" align="center">
+	
+	<p align="center" style="font-size: 36px"><b>Smash or Pass?</b></p>
+	<table border="0" cellspacing="0" cellpadding="0" id="bigtable">
+		<tr>
+			<td>
+				<p align="center"><a href="#"><img src="random_order.png" id="passButton" onclick="pass();"></a></p>
+				<p align="center" id="Npassed"  style="font-size: 36px">&nbsp;</p>
+			</td>
+			<td>
+				<p align="center" id="remaining" style="font-size: 24px">&nbsp;</p>
+				<p align="center"><img id="current" src="../ball.png" draggable="false" width=475px ></p>	
+				<p align="center" id="currentName" style="font-size: 24px">&nbsp;</p>
+			</td>
+			<td>
+				<p align="center"><a href="#"><img src="normal_order.png" id="smashButton" onclick="smash();"></a></p>
+				<p align="center" id="Nsmashed"  style="font-size: 36px">&nbsp;</p>
+			</td>
+		</tr>
+	</table>
+	
+	<p align="center" style="font-size:16px;opacity: 0.75;">[<a href="#" onclick="showscores()">Show results</a>]</p>
+	<p id="bottom" align="center"></p>
+	
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a>. Version 0.1.0<br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	</p>
+</div>
+
+
+</body>
+</html>
