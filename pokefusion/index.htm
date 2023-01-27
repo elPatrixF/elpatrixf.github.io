@@ -338,7 +338,7 @@ p.help
 			}
 		}
 		
-		document.getElementById('copyableLink').value = link;
+		document.getElementById('copyableLink').value = link+"#";
 		
 		if ((getParameter(resultA,"name")) != null)
 		{
@@ -347,7 +347,7 @@ p.help
 				link += "right="+getParameter(resultB,"name").replace(" ","_")+";";
 		}
 		
-		document.getElementById('copyableLink2').value = link;
+		document.getElementById('copyableLink2').value = link+"#";
 	}
 	
 	function openTargetSettings()
@@ -508,7 +508,7 @@ p.help
 	</script>
 	
 	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
-	<span title=":3">Version 0.14.1</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<span title=":3">Version 0.14.2</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
