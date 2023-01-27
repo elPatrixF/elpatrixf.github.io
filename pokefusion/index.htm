@@ -1,7 +1,7 @@
 <html>
 <head>
-<title>Fair Random Pokemon Generator for Pokefusion</title>	
-<meta property="og:title" content="Fair Random Pokemon Generator for Pokefusion">
+<title>Pat's Randomizer for Pokefusions</title>	
+<meta property="og:title" content="Pat's Random Pokemon Generator for Pokefusion">
 <meta property="og:description" content="This website will generate two random pokemon which are fun to fuse, don't suck, and are definitely not furry bait.">
 <meta property="og:image" content="https://cdn.discordapp.com/emojis/996157223581515806.webp">
 </head>
@@ -34,11 +34,16 @@ function rand(max) {
   return Math.floor(Math.random() * max);
 }
 
+//v2, returns null when parameter not found
 function getParameter(s,p)
 {
-	result = s.substring(s.search(p)+p.length+1,s.length);
-	result = result.substring(0,result.search(";"));
-	return result;
+	if (s.search(p+"=") == "-1") return null;
+	else
+	{
+		result = s.substring(s.search(p+"=")+p.length+1,s.length);
+		result = result.substring(0,result.search(";"));
+		return result;
+	}
 }
 function getBase(s)
 {
@@ -255,6 +260,22 @@ function showAllScores()
 }
 
 //---------------
+
+function findPokemon(array,he)
+{
+	var there = array.length-1;
+	found = false;
+	while ((!found)&&(there>-1))
+	{
+		if (getParameter(array[there],"name") == he)
+		{
+			found = true;
+		}
+		else there--;
+	}
+	return there;
+}
+
 </script>
 
 <style>
@@ -278,8 +299,7 @@ p.help
 
 <div class="random_selectors" align="center">
 	<p align="center" id="target">Target score: -/- to -/-</p>
-	<p align="center" style="font-size:12px"><a href="#" onclick="openTargetSettings();">[Change settings]</a> - <a href="#" onclick="showAllScores();">[Choose manually/Show scores]</a> - <a href="#" onclick="whatsThis();">[Whats this?]</a>
-	--- Other sites: <a href="../poke/wouldyourather/">[Would you rather?]</a> - <a href="../poke/smashorpass/">[SMASH or PASS]</a></p>
+	<p align="center" style="font-size:18px"><a href="#" onclick="openTargetSettings();">[<b>&#x2699;Settings</b>]</a> - <a href="#" onclick="showAllScores();">[Choose manually/Show scores]</a> - <a href="#" onclick="whatsThis();">[Whats this?]</a></p>
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<td>
@@ -301,6 +321,35 @@ p.help
 	<p align="center" style="font-size:12px;opacity:0.6;" id="DetailsB">Or on the Pokeball to the left...</p>
 	
 	<script>
+	
+	function updateshareable(number)
+	{
+		link = "http://elpatrixf.com/pokefusion/?";
+		
+		{
+			if (parseFloat(document.getElementById('base_bottom').value) != 5) link += "1base="+document.getElementById('base_bottom').value+";";
+			if (parseFloat(document.getElementById('elem_bottom').value) != 5) link += "1elem="+document.getElementById('elem_bottom').value+";";
+			if (parseFloat(document.getElementById('base_top').value) < 12)    link += "2base="+document.getElementById('base_top').value+";";
+			if (parseFloat(document.getElementById('elem_top').value) < 12)    link += "2elem="+document.getElementById('elem_top').value+";";
+			
+			if (document.getElementById("dataset").value != "average")
+			{
+				link += "data="+document.getElementById("dataset").value+";"
+			}
+		}
+		
+		document.getElementById('copyableLink').value = link;
+		
+		if ((getParameter(resultA,"name")) != null)
+		{
+			link += "left="+getParameter(resultA,"name").replace(" ","_")+";";
+			if (getParameter(resultB,"name") != null)
+				link += "right="+getParameter(resultB,"name").replace(" ","_")+";";
+		}
+		
+		document.getElementById('copyableLink2').value = link;
+	}
+	
 	function openTargetSettings()
 	{
 		document.getElementById('base_bottom').value = targetBottom[0];
@@ -311,6 +360,8 @@ p.help
 		if (pokemonlist == averagelist) document.getElementById("dataset").value = "average";
 		if (pokemonlist == vialist) document.getElementById("dataset").value = "via";
 		if (pokemonlist == patlist) document.getElementById("dataset").value = "pat";
+		
+		updateshareable();
 		
 		document.getElementById('targetSettings').showModal()
 	}
@@ -363,6 +414,7 @@ p.help
 		document.getElementById('elem_bottom').value = 0;
 		document.getElementById('base_top').value = 12;
 		document.getElementById('elem_top').value = 12;
+		updateshareable();
 	}
 	function setDefaults()
 	{
@@ -370,35 +422,46 @@ p.help
 		document.getElementById('elem_bottom').value = 5;
 		document.getElementById('base_top').value = 12;
 		document.getElementById('elem_top').value = 12;
+		updateshareable();
+	}
+	
+	function copyLink(s)
+	{
+		var copyText = document.getElementById("copyableLink"+s);
+		copyText.select();
+		copyText.setSelectionRange(0, 99999); 
+		navigator.clipboard.writeText(copyText.value);
 	}
 	</script>
 	
 	<dialog id="targetSettings" style="font-size:64px">
 	<p style="font-size:24px">Please choose your new target score range:</p>
 	<p style="font-size:64px">
-		<input style="font-size:64px;width: 155px" type="number" step="0.5" min="0" max="12" id="base_bottom"></input>
+		<input style="font-size:52px;width: 145px" type="number" step="0.5" min="0" max="12" onchange="updateshareable()" id="base_bottom"></input>
 		/
-		<input style="font-size:64px;width: 155px" type="number" step="0.5" min="0" max="12" id="elem_bottom"></input>
+		<input style="font-size:52px;width: 145px" type="number" step="0.5" min="0" max="12" onchange="updateshareable()" id="elem_bottom"></input>
 		to 
-		<input style="font-size:64px;width: 155px" type="number" step="0.5" min="0" max="12" id="base_top"></input>
+		<input style="font-size:52px;width: 145px" type="number" step="0.5" min="0" max="12" onchange="updateshareable()" id="base_top"></input>
 		/
-		<input style="font-size:64px;width: 155px" type="number" step="0.5" min="0" max="12" id="elem_top"></input>
+		<input style="font-size:52px;width: 145px" type="number" step="0.5" min="0" max="12" onchange="updateshareable()" id="elem_top"></input>
 	</p>
-	<br>
-	<p style="font-size:24px">Please choose your dataset:</p>
-	<p>
-		<select style="font-size:24px" id="dataset">
+	<p style="font-size:24px">Shareable link:<br>
+		<input style="width: 320px" type="text" readonly id="copyableLink"></input> <button style="font-size:16px" onclick="copyLink('');">Copy link to clipboard (only settings)</button>
+		<br>
+		<input style="width: 320px" type="text" readonly id="copyableLink2"></input> <button style="font-size:16px" onclick="copyLink('2');">Copy link to clipboard (results)</button> 
+	</p><hr>
+	<p style="font-size:24px">Please choose your dataset: 
+		<select style="font-size:24px" id="dataset"  onchange="updateshareable()">
           <option value="average">Averaged Scores</option>
           <option value="pat">Pat Scores</option>
 	<!--  <option value="via">Via Scores</option>    Turned into secret option :3>   -->
         </select>
 	</p>
-	<br>
-	<p>
+	<p style="font-size:24px">Quick settings: 
 		<button style="font-size:24px" onclick="setDefaults();">Reset to defaults</button> 
 		<button style="font-size:24px" onclick="freeForAll();">Free for all</button>
 	</p>
-	<br>
+	<hr>
 	<p>
 		<button style="font-size:24px" id="cancelTarget" onclick="document.getElementById('targetSettings').close();">Cancel</button> 
 		<button style="font-size:24px" id="confirmTarget" onclick="document.getElementById('targetSettings').close();setNewTargets();">OK</button>
@@ -408,7 +471,44 @@ p.help
 	<!-- FULL SCORES -->
 	<p id="fullScores" align="center"></p>
 	
-	<p align="right" style="font-size:12px;opacity:0.4;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>. Version 0.13.5<br>Other projects: <a href="https://elpatrixf.com/poke/wouldyourather">[Would you rather?]</a> / <a href="https://elpatrixf.com/poke/smashorpass">[Smash or Pass]</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<script>
+	//Read parameters.
+	var it = 0;
+	var urlparams = window.location.href.replace("_"," ");
+	
+	if (getParameter(urlparams,"1base") != null) 	targetBottom[0] = parseFloat(getParameter(urlparams,"1base"));
+	if (getParameter(urlparams,"1elem") != null) 	targetBottom[1] = parseFloat(getParameter(urlparams,"1elem"));
+	if (getParameter(urlparams,"2base") != null) 	targetTop[0] =    parseFloat(getParameter(urlparams,"2base"));
+	if (getParameter(urlparams,"2elem") != null) 	targetTop[1] =    parseFloat(getParameter(urlparams,"2elem"));
+	
+	if (getParameter(urlparams,"data") != null)
+	{
+		whichdata = getParameter(urlparams,"data");
+		if (whichdata == "pat") 	pokemonlist = patlist;
+		if (whichdata == "via") 	pokemonlist = vialist;
+	}
+	
+	if (getParameter(urlparams,"left") != null)
+	{
+		it = findPokemon(pokemonlist,getParameter(urlparams,"left"));
+		if (it > -1) SetA(it);
+		
+		if (getParameter(urlparams,"right") != null)
+		{
+			it = findPokemon(compatible,getParameter(urlparams,"right"));
+			if (it > -1) SetB(it);
+		}
+	}
+	else
+	if (getParameter(urlparams,"right") != null)
+	{
+		it = findPokemon(pokemonlist,getParameter(urlparams,"right"));
+		if (it>-1) SetA(it);
+	}
+	</script>
+	
+	<p align="right" style="font-size:12px;opacity:0.3;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
+	<span title=":3">Version 0.14.1</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
