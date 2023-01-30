@@ -323,6 +323,24 @@ function unhideInfinite()
 	if (document.getElementById('infinite2')!=null) document.getElementById('infinite2').hidden = false;
 }
 
+function forceShowInfinite()
+{
+	if (checkForInfinites)
+	{
+		document.getElementById("DetailsBInfinite").remove();
+		showInfinite();
+	}
+	else
+	{
+		checkForInfinites = true;
+		showInfinitesAutomatically = true;
+		document.getElementById("DetailsBInfinite").remove();
+		showInfinite();
+		checkForInfinites = false;
+		showInfinitesAutomatically = false;
+	}
+}
+
 function showInfinite()
 {
 	if (checkForInfinites)
@@ -347,6 +365,10 @@ function showInfinite()
 			}
 			else document.getElementById("DetailsB").innerHTML += "<br>This pokemon is available on infinite fusion but doesn't currently have a custom sprite.";
 		}
+	}
+	else
+	{
+		if ((infiniteids[parseInt(getParameter(resultA,"dex"))]>0)&(infiniteids[parseInt(getParameter(resultB,"dex"))]>0)) document.getElementById("DetailsB").innerHTML += "<span style='opacity: 0.5;' id='DetailsBInfinite'><br>To check if it has a custom sprite, <a href='#' onclick='forceShowInfinite();'>click here</a>.</span>";
 	}
 }
 
@@ -551,7 +573,7 @@ p.help
           <option value="pat">Pat Scores</option>
 	<!--  <option value="via">Via Scores</option>    Turned into secret option :3>   -->
         </select>
-		<br><input id="checkboxInfinite" name="checkboxInfinite" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxInfinite">Check if Infinite Fusion custom sprite exists</label>
+		<br><input id="checkboxInfinite" name="checkboxInfinite" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxInfinite" title="This setting is optional because it slows down the website.">Automatically check if Infinite Fusion custom sprite exists</label>
 		<br><input id="checkboxAutoInfinite" name="checkboxAutoInfinite" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxAutoInfinite">Display that sprite automatically</label><hr>
 	</p>
 	<p style="font-size:24px">Quick settings: 
@@ -609,7 +631,7 @@ p.help
 	</script>
 	
 	<p align="right" style="font-size:12px;opacity:0.5;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
-	<span title=":3">Version 0.15.3</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
+	<span title=":3">Version 0.15.4</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
 	Infinite fusion data gathered from <a title="I hope you guys don't mind me grabbing the pictures from your site!" href='https://aegide.github.io/'>aegide.github.io</a><br>
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
