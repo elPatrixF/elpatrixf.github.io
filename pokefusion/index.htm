@@ -13,6 +13,7 @@
 
 </style>
 <script src="scores.js"></script>
+<script src="infinite.js"></script>
 
 <script>
 
@@ -53,6 +54,28 @@ function getElem(s)
 {
 	return getParameter(s,"elements")-0;
 }
+//---------------
+
+var infiniteids = [];
+var infiniteexists = new Map();
+function printInfinites()
+{
+	var pip = "";
+	for(i=0;i<pokemonlist.length;i++)
+	{
+		found = 0;
+		for(j=0;j<infiniteid.length;j++)
+		{
+			pip = getParameter(pokemonlist[i],"name").toLowerCase();
+			if (pip == infiniteid[j][0].toLowerCase())	found = infiniteid[j][1];
+			if (found>0) break;
+		}
+		if (infiniteids[parseInt(getParameter(pokemonlist[i],"dex"))] == null) infiniteids[parseInt(getParameter(pokemonlist[i],"dex"))] = found;
+		//console.log("["+parseInt(getParameter(pokemonlist[i],"dex"))+" ] = "+infiniteids[parseInt(getParameter(pokemonlist[i],"dex"))]+"");
+	}
+}
+printInfinites();
+
 //---------------
 
 var compatible = [];
@@ -120,6 +143,7 @@ function SetB(i)
 	document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
 	document.getElementById('DetailsB').innerHTML = '<a href=# onclick="whoB()">'+compatible.length + " pokémon</a> match the score conditions.";	
 	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	showInfinite();
 	document.getElementById("swapbutton").style.opacity = 0.75;
 }
 
@@ -138,6 +162,7 @@ function swap()
 		document.getElementById('ScoreB').innerText = getParameter(resultB,"name") + ": " + getBase(resultB)+"/"+getElem(resultB);
 		document.getElementById('DetailsB').innerHTML = '<a href=# onclick="whoB()">'+compatible.length + " pokémon</a> match the score conditions.";	
 		document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+		showInfinite();
 	}
 }
 
@@ -161,6 +186,7 @@ function GenB()
 	
 	}
 	document.getElementById('total').innerText = "Total score: "+(getBase(resultA)+getBase(resultB))+"/"+(getElem(resultA)+getElem(resultB));
+	showInfinite();
 }
 //---------------
 
@@ -276,6 +302,54 @@ function findPokemon(array,he)
 	return there;
 }
 
+// TO-DO : Implement code to tell if a custom infinite fusion sprite has already been made.
+
+var checkForInfinites = false;
+var showInfinitesAutomatically = false;
+
+function existsInfinite(a,b){
+    //I'm stealing this real quick sorry!
+	//Please visit https://aegide.github.io/
+	imgurl = "https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + a +"."+b+".png";
+	var http = new XMLHttpRequest();
+    http.open('HEAD', imgurl, false);
+    http.send();
+    return http.status != 404;
+}
+
+function unhideInfinite()
+{
+	document.getElementById('infinite').hidden = false;
+	if (document.getElementById('infinite2')!=null) document.getElementById('infinite2').hidden = false;
+}
+
+function showInfinite()
+{
+	if (checkForInfinites)
+	{
+		a = infiniteids[parseInt(getParameter(resultA,"dex"))];
+		b = infiniteids[parseInt(getParameter(resultB,"dex"))];
+		if ((a>0)&(b>0))
+		{
+			if (existsInfinite(a,b))
+			{
+				document.getElementById("DetailsB").innerHTML += "<br>This pokemon exists on <a href='#' onclick='unhideInfinite()'>Infinite Fusion</a>: <br><img id='infinite' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + a +"."+b+".png'>";
+				if (existsInfinite(b,a))
+				{
+					document.getElementById("DetailsB").innerHTML += "<img id='infinite2' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + b +"."+a+".png'>"
+				}
+				if (showInfinitesAutomatically) unhideInfinite();
+			}
+			else if (existsInfinite(b,a))
+			{
+				document.getElementById("DetailsB").innerHTML += "<br>This pokemon exists on <a href='#' onclick='unhideInfinite()'>Infinite Fusion</a> <br><img id='infinite' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + b +"."+a+".png'>";
+				if (showInfinitesAutomatically) unhideInfinite();
+			}
+			else document.getElementById("DetailsB").innerHTML += "<br>This pokemon is available on infinite fusion but doesn't currently have a custom sprite.";
+		}
+	}
+}
+
 </script>
 
 <style>
@@ -320,7 +394,7 @@ p.help
 		</tr>
 	</table>
 	<p align="center" id="total">Click on the plus + sign</p>
-	<p align="center" style="font-size:12px;opacity:0.6;" id="DetailsB">Or on the Pokeball to the left...</p>
+	<p align="center" style="font-size:12px;" id="DetailsB">Or on the Pokeball to the left...</p>
 	
 	<script>
 	
@@ -483,6 +557,8 @@ p.help
 	if (getParameter(urlparams,"2base") != null) 	targetTop[0] =    parseFloat(getParameter(urlparams,"2base"));
 	if (getParameter(urlparams,"2elem") != null) 	targetTop[1] =    parseFloat(getParameter(urlparams,"2elem"));
 	
+	if (getParameter(urlparams,"checkInfinites") != null) 	{checkForInfinites = true; showInfinitesAutomatically = true;}
+	
 	if (getParameter(urlparams,"data") != null)
 	{
 		whichdata = getParameter(urlparams,"data");
@@ -510,7 +586,10 @@ p.help
 	</script>
 	
 	<p align="right" style="font-size:12px;opacity:0.5;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
-	<span title=":3">Version 0.14.3</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures
+	<span title=":3">Version 0.15.1</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
+	<script>
+	if (checkForInfinites) document.write("Infinite fusion data gathered from <a href='https://aegide.github.io/'>aegide.github.io</a>. Please click <a href='https://aegide.github.io/'>here</a> for more information.<br>");
+	</script>
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
