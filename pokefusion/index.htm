@@ -333,16 +333,16 @@ function showInfinite()
 		{
 			if (existsInfinite(a,b))
 			{
-				document.getElementById("DetailsB").innerHTML += "<br>This pokemon exists on <a href='#' onclick='unhideInfinite()'>Infinite Fusion</a>: <br><img id='infinite' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + a +"."+b+".png'>";
+				document.getElementById("DetailsB").innerHTML += "<br>This pokemon has a custom sprite on <a href='#' onclick='unhideInfinite()'>Infinite Fusion</a>: <br><a href='https://aegide.github.io/'><img id='infinite' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + a +"."+b+".png'></a>";
 				if (existsInfinite(b,a))
 				{
-					document.getElementById("DetailsB").innerHTML += "<img id='infinite2' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + b +"."+a+".png'>"
+					document.getElementById("DetailsB").innerHTML += "<a href='https://aegide.github.io/'><img id='infinite2' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + b +"."+a+".png'></a>"
 				}
 				if (showInfinitesAutomatically) unhideInfinite();
 			}
 			else if (existsInfinite(b,a))
 			{
-				document.getElementById("DetailsB").innerHTML += "<br>This pokemon exists on <a href='#' onclick='unhideInfinite()'>Infinite Fusion</a> <br><img id='infinite' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + b +"."+a+".png'>";
+				document.getElementById("DetailsB").innerHTML += "<br>This pokemon has a custom sprite on <a href='#' onclick='unhideInfinite()'>Infinite Fusion</a> <br><a href='https://aegide.github.io/'><img id='infinite' hidden src='https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + b +"."+a+".png'></a>";
 				if (showInfinitesAutomatically) unhideInfinite();
 			}
 			else document.getElementById("DetailsB").innerHTML += "<br>This pokemon is available on infinite fusion but doesn't currently have a custom sprite.";
@@ -412,6 +412,19 @@ p.help
 			{
 				link += "data="+document.getElementById("dataset").value+";"
 			}
+			
+			if (document.getElementById("checkboxInfinite").checked)
+			{
+				link += "checkInfinites=;";
+				document.getElementById("checkboxAutoInfinite").disabled = false;
+			}
+			else 
+			{
+				document.getElementById("checkboxAutoInfinite").checked = false;
+				document.getElementById("checkboxAutoInfinite").disabled = true;
+			}
+			
+			if (document.getElementById("checkboxAutoInfinite").checked)		link += "showAutoInfinites=;";
 		}
 		
 		document.getElementById('copyableLink').value = link+"#";
@@ -436,6 +449,9 @@ p.help
 		if (pokemonlist == averagelist) document.getElementById("dataset").value = "average";
 		if (pokemonlist == vialist) document.getElementById("dataset").value = "via";
 		if (pokemonlist == patlist) document.getElementById("dataset").value = "pat";
+		
+		document.getElementById("checkboxInfinite").checked = checkForInfinites;
+		document.getElementById("checkboxAutoInfinite").checked = showInfinitesAutomatically;
 		
 		updateshareable();
 		
@@ -462,6 +478,9 @@ p.help
 		if (targetBottom[1]<0) targetBottom[1]=0;
 		if (targetTop[0]<0) targetTop[0]=0;
 		if (targetTop[1]<0) targetTop[1]=0;
+		
+		checkForInfinites = document.getElementById("checkboxInfinite").checked;
+		showInfinitesAutomatically = document.getElementById("checkboxAutoInfinite").checked;
 		
 		resultA = "";
 		resultB = "";
@@ -532,6 +551,8 @@ p.help
           <option value="pat">Pat Scores</option>
 	<!--  <option value="via">Via Scores</option>    Turned into secret option :3>   -->
         </select>
+		<br><input id="checkboxInfinite" name="checkboxInfinite" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxInfinite">Check if Infinite Fusion custom sprite exists</label>
+		<br><input id="checkboxAutoInfinite" name="checkboxAutoInfinite" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxAutoInfinite">Display that sprite automatically</label><hr>
 	</p>
 	<p style="font-size:24px">Quick settings: 
 		<button style="font-size:24px" onclick="setDefaults();">Reset to defaults</button> 
@@ -557,7 +578,9 @@ p.help
 	if (getParameter(urlparams,"2base") != null) 	targetTop[0] =    parseFloat(getParameter(urlparams,"2base"));
 	if (getParameter(urlparams,"2elem") != null) 	targetTop[1] =    parseFloat(getParameter(urlparams,"2elem"));
 	
-	if (getParameter(urlparams,"checkInfinites") != null) 	{checkForInfinites = true; showInfinitesAutomatically = true;}
+	if (getParameter(urlparams,"checkInfinites") != null) 	{checkForInfinites = true;}
+	if (getParameter(urlparams,"showAutoInfinites") != null) 	{showInfinitesAutomatically = true;}
+	
 	
 	if (getParameter(urlparams,"data") != null)
 	{
@@ -586,10 +609,8 @@ p.help
 	</script>
 	
 	<p align="right" style="font-size:12px;opacity:0.5;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
-	<span title=":3">Version 0.15.1</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
-	<script>
-	if (checkForInfinites) document.write("Infinite fusion data gathered from <a href='https://aegide.github.io/'>aegide.github.io</a>. Please click <a href='https://aegide.github.io/'>here</a> for more information.<br>");
-	</script>
+	<span title=":3">Version 0.15.3</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
+	Infinite fusion data gathered from <a title="I hope you guys don't mind me grabbing the pictures from your site!" href='https://aegide.github.io/'>aegide.github.io</a><br>
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
 	</div>
