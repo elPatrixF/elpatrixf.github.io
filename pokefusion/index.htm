@@ -264,10 +264,10 @@ function showCompatibleScores()
 
 function showAllScores()
 {
-	fulls = "<hr>Full dataset scores (";
-	if (pokemonlist == averagelist) fulls += "Average)" ;
-	if (pokemonlist == vialist) fulls += "Via)";
-	if (pokemonlist == patlist) fulls += "Pat)";
+	fulls = "<hr>Choose a Pokemon";
+	//if (pokemonlist == averagelist) fulls += " (Average Dataset)" ;
+	if (pokemonlist == vialist) fulls += " (Via Scores)";
+	if (pokemonlist == patlist) fulls += " (Pat Scores)";
 	
 	fulls += '  <a style="font-size: 12px" href="#" onclick="document.getElementById(\'fullScores\').innerHTML = \'\';">[close]</a><hr><table>';
 	fulls += "<tr><th>dex#</th><th>Name</th><th>B / E</th></tr>";
@@ -395,7 +395,7 @@ p.help
 
 <div class="random_selectors" align="center">
 	<p align="center" id="target">Target score: -/- to -/-</p>
-	<p align="center" style="font-size:18px"><a href="#" onclick="openTargetSettings();">[<b>&#x2699;Settings</b>]</a> - <a href="#" onclick="showAllScores();">[Choose manually/Show scores]</a> - <a href="#" onclick="whatsThis();">[Whats this?]</a>
+	<p align="center" style="font-size:18px"><a href="#" onclick="openTargetSettings();">[<b>&#x2699;Settings</b>]</a> - <a href="#" onclick="showAllScores();">[Choose manually]</a> - <a href="#" onclick="whatsThis();">[Whats this?]</a>
 	<br><span style="font-size:12px">Other projects: <a target="_blank" href="https://elpatrixf.com/poke/smashorpass">[SMASH or PASS]</a> / <a target="_blank" href="https://elpatrixf.com/poke/wouldyourather">[Would you rather?]</a></span>
 	</p>
 	<table border="0" cellspacing="0" cellpadding="0">
@@ -631,7 +631,7 @@ p.help
 	</script>
 	
 	<p align="right" style="font-size:12px;opacity:0.5;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
-	<span title=":3">Version 0.15.4</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
+	<span title=":3">Version 0.15.5</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
 	Infinite fusion data gathered from <a title="I hope you guys don't mind me grabbing the pictures from your site!" href='https://aegide.github.io/'>aegide.github.io</a><br>
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
