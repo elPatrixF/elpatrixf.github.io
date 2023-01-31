@@ -59,6 +59,7 @@ function getElem(s)
 
 var infiniteids = [];
 var infiniteexists = new Map();
+var avoidInfiniteFusions = false;
 function printInfinites()
 {
 	var pip = "";
@@ -100,6 +101,7 @@ function populateB()
 		elements = getElem(pokemonlist[i]) + elementsOG;
 		if ((pokemonlist[i]!=resultA)&&((base>=targetBottom[0])&(base<=targetTop[0])&(elements>=targetBottom[1])&(elements<=targetTop[1])))
 		{
+			if ((!avoidInfiniteFusions)||(!(existsInfinite(infiniteids[parseInt(getParameter(resultA,"dex"))],infiniteids[parseInt(getParameter(pokemonlist[i],"dex"))]))))
 			compatible.push(pokemonlist[i]);
 		}
 	}
@@ -376,7 +378,7 @@ function showInfinite()
 	}
 	else
 	{
-		if ((infiniteids[parseInt(getParameter(resultA,"dex"))]>0)&(infiniteids[parseInt(getParameter(resultB,"dex"))]>0)) document.getElementById("DetailsB").innerHTML += "<span style='opacity: 0.5;' id='DetailsBInfinite'><br>To check if it has a custom sprite, <a href='#' onclick='forceShowInfinite();'>click here</a>.</span>";
+		if ((!avoidInfiniteFusions)&(infiniteids[parseInt(getParameter(resultA,"dex"))]>0)&(infiniteids[parseInt(getParameter(resultB,"dex"))]>0)) document.getElementById("DetailsB").innerHTML += "<span style='opacity: 0.5;' id='DetailsBInfinite'><br>To check if it has a custom sprite, <a href='#' onclick='forceShowInfinite();'>click here</a>.</span>";
 		else document.getElementById("DetailsB").innerHTML += "<span style='opacity: 0.5;' id='DetailsBInfinite'><br>&nbsp;</span>";
 	}
 }
@@ -404,7 +406,7 @@ p.help
 
 <div class="random_selectors" align="center">
 	<p align="center" id="target">Target score: -/- to -/-</p>
-	<p align="center" style="font-size:18px"><a href="#" onclick="openTargetSettings();">[<b>&#x2699;Settings</b>]</a> - <a href="#" onclick="showAllScores();">[Choose manually]</a> - <a href="#" onclick="whatsThis();">[Whats this?]</a>
+	<p align="center" style="font-size:18px"><a href="#" onclick="openTargetSettings();">[<b>&#x2699;Settings</b>]</a> - <a href="#" onclick="showAllScores();">[Choose manually]</a> - <a href="#" onclick="clearAll();">[Clear]</a> - <a href="#" onclick="whatsThis();">[Whats this?]</a>
 	<br><span style="font-size:12px">Other projects: <a target="_blank" href="https://elpatrixf.com/poke/smashorpass">[SMASH or PASS]</a> / <a target="_blank" href="https://elpatrixf.com/poke/wouldyourather">[Would you rather?]</a></span>
 	</p>
 	<table border="0" cellspacing="0" cellpadding="0">
@@ -428,6 +430,23 @@ p.help
 	<p align="center" style="font-size:12px;" id="DetailsB">Or on the Pokeball to the left...<br>&nbsp;</p>
 	
 	<script>
+	function clearAll()
+	{
+		resultA = "";
+		resultB = "";
+		compatible = [];
+		document.getElementById("swapbutton").style.opacity = 0;
+		
+		updateScore();
+		
+		document.getElementById('GenA').src = "ball.png";
+		document.getElementById('GenB').src = "ball.png";
+		document.getElementById('ScoreA').innerHTML = "&nbsp;";
+		document.getElementById('ScoreB').innerHTML = "&nbsp;";
+		document.getElementById('DetailsB').innerHTML = "&nbsp;<br>&nbsp;";
+		document.getElementById('total').innerHTML = "&nbsp;";
+		document.getElementById('fullScores').innerHTML = '';
+	}
 	
 	function updateshareable(number)
 	{
@@ -456,6 +475,7 @@ p.help
 			}
 			
 			if (document.getElementById("checkboxAutoInfinite").checked)		link += "showAutoInfinites=;";
+			if (document.getElementById("checkboxAvoidInfiniteFusions").checked)		link += "avoidInfiniteFusions=;";
 		}
 		
 		document.getElementById('copyableLink').value = link+"#";
@@ -483,6 +503,7 @@ p.help
 		
 		document.getElementById("checkboxInfinite").checked = checkForInfinites;
 		document.getElementById("checkboxAutoInfinite").checked = showInfinitesAutomatically;
+		document.getElementById("checkboxAvoidInfiniteFusions").checked = avoidInfiniteFusions;
 		
 		updateshareable();
 		
@@ -512,26 +533,13 @@ p.help
 		
 		checkForInfinites = document.getElementById("checkboxInfinite").checked;
 		showInfinitesAutomatically = document.getElementById("checkboxAutoInfinite").checked;
+		avoidInfiniteFusions = document.getElementById("checkboxAvoidInfiniteFusions").checked;
 		
-		resultA = "";
-		resultB = "";
-		compatible = [];
-		document.getElementById("swapbutton").style.opacity = 0;
-		
-		updateScore();
+		clearAll();
 		
 		if (document.getElementById("dataset").value == "average") pokemonlist = averagelist;
 		if (document.getElementById("dataset").value == "via") pokemonlist = vialist;
 		if (document.getElementById("dataset").value == "pat") pokemonlist = patlist;
-		
-		document.getElementById('GenA').src = "ball.png";
-		document.getElementById('GenB').src = "ball.png";
-		document.getElementById('ScoreA').innerHTML = "&nbsp;";
-		document.getElementById('ScoreB').innerHTML = "&nbsp;";
-		document.getElementById('DetailsB').innerHTML = "&nbsp;";
-		document.getElementById('total').innerHTML = "&nbsp;";
-		document.getElementById('fullScores').innerHTML = '';
-		
 	}
 	
 	function freeForAll()
@@ -571,7 +579,7 @@ p.help
 		/
 		<input style="font-size:52px;width: 145px" type="number" step="0.5" min="0" max="12" onchange="updateshareable()" id="elem_top"></input>
 	</p>
-	<p style="font-size:24px">Shareable link:<br>
+	<p style="font-size:24px"><b>Shareable link:</b><br>
 		<input style="width: 320px" type="text" readonly id="copyableLink"></input> <button style="font-size:16px" onclick="copyLink('');">Copy link to clipboard (only settings)</button>
 		<br>
 		<input style="width: 320px" type="text" readonly id="copyableLink2"></input> <button style="font-size:16px" onclick="copyLink('2');">Copy link to clipboard (results)</button> 
@@ -582,10 +590,15 @@ p.help
           <option value="pat">Pat Scores</option>
 	<!--  <option value="via">Via Scores</option>    Turned into secret option :3>   -->
         </select>
+		</p><hr>
+	<p style="font-size:24px">
+		<b>Pokemon Infinite Fusion settings:</b>
+		<br><input id="checkboxAvoidInfiniteFusions" name="checkboxAvoidInfiniteFusions" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxAvoidInfiniteFusions">Avoid generating pairs which already have custom sprites</label>
 		<br><input id="checkboxInfinite" name="checkboxInfinite" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxInfinite" title="This setting is optional because it slows down the website.">Automatically check if Infinite Fusion custom sprite exists</label>
-		<br><input id="checkboxAutoInfinite" name="checkboxAutoInfinite" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxAutoInfinite">Display that sprite automatically</label><hr>
+		<br><input id="checkboxAutoInfinite" name="checkboxAutoInfinite" type="checkbox" style="font-size:24px" onchange="updateshareable()"><label for="checkboxAutoInfinite">Display that sprite automatically</label>
+		<hr>
 	</p>
-	<p style="font-size:24px">Quick settings: 
+	<p style="font-size:24px"><b>Quick settings: </b>
 		<button style="font-size:24px" onclick="setDefaults();">Reset to defaults</button> 
 		<button style="font-size:24px" onclick="freeForAll();">Free for all</button>
 	</p>
@@ -611,6 +624,7 @@ p.help
 	
 	if (getParameter(urlparams,"checkInfinites") != null) 	{checkForInfinites = true;}
 	if (getParameter(urlparams,"showAutoInfinites") != null) 	{showInfinitesAutomatically = true;}
+	if (getParameter(urlparams,"avoidInfiniteFusions") != null) 	{avoidInfiniteFusions = true;}
 	
 	
 	if (getParameter(urlparams,"data") != null)
@@ -640,7 +654,7 @@ p.help
 	</script>
 	
 	<p align="right" style="font-size:12px;opacity:0.5;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
-	<span title=":3">Version 0.15.8</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
+	<span title=":3">Version 0.16.1</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
 	Infinite fusion data gathered from <a title="I hope you guys don't mind me grabbing the pictures from your site!" href='https://aegide.github.io/'>aegide.github.io</a><br>
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
