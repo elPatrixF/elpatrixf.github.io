@@ -372,10 +372,12 @@ function showInfinite()
 			}
 			else document.getElementById("DetailsB").innerHTML += "<br>This pokemon is available on infinite fusion but doesn't currently have a custom sprite.";
 		}
+		else document.getElementById("DetailsB").innerHTML += "<span style='opacity: 0.5;' id='DetailsBInfinite'><br>&nbsp;</span>";
 	}
 	else
 	{
 		if ((infiniteids[parseInt(getParameter(resultA,"dex"))]>0)&(infiniteids[parseInt(getParameter(resultB,"dex"))]>0)) document.getElementById("DetailsB").innerHTML += "<span style='opacity: 0.5;' id='DetailsBInfinite'><br>To check if it has a custom sprite, <a href='#' onclick='forceShowInfinite();'>click here</a>.</span>";
+		else document.getElementById("DetailsB").innerHTML += "<span style='opacity: 0.5;' id='DetailsBInfinite'><br>&nbsp;</span>";
 	}
 }
 
@@ -423,7 +425,7 @@ p.help
 		</tr>
 	</table>
 	<p align="center" id="total">Click on the plus + sign</p>
-	<p align="center" style="font-size:12px;" id="DetailsB">Or on the Pokeball to the left...</p>
+	<p align="center" style="font-size:12px;" id="DetailsB">Or on the Pokeball to the left...<br>&nbsp;</p>
 	
 	<script>
 	
@@ -638,7 +640,7 @@ p.help
 	</script>
 	
 	<p align="right" style="font-size:12px;opacity:0.5;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
-	<span title=":3">Version 0.15.7</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
+	<span title=":3">Version 0.15.8</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
 	Infinite fusion data gathered from <a title="I hope you guys don't mind me grabbing the pictures from your site!" href='https://aegide.github.io/'>aegide.github.io</a><br>
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
