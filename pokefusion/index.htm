@@ -14,6 +14,7 @@
 </style>
 <script src="scores.js"></script>
 <script src="infinite.js"></script>
+<script src="allinfinitypics.js"></script>
 
 <script>
 
@@ -310,11 +311,17 @@ var showInfinitesAutomatically = false;
 function existsInfinite(a,b){
     //I'm stealing this real quick sorry!
 	//Please visit https://aegide.github.io/
+	
+	/*
 	imgurl = "https://raw.githubusercontent.com/Aegide/custom-fusion-sprites/main/CustomBattlers/" + a +"."+b+".png";
 	var http = new XMLHttpRequest();
     http.open('HEAD', imgurl, false);
     http.send();
     return http.status != 404;
+	*/
+	
+	//This is faster
+	return allInfinityPics.includes(a+"."+b+".png");
 }
 
 function unhideInfinite()
@@ -631,7 +638,7 @@ p.help
 	</script>
 	
 	<p align="right" style="font-size:12px;opacity:0.5;">By @<a href="https://twitter.com/elpatrixf">elpatrixf</a> and @<a href="https://twitter.com/viardzen">viardzen</a>.
-	<span title=":3">Version 0.15.5</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
+	<span title=":3">Version 0.15.7</a><br>pokémon ©1995 pokémon, nintendo, game freak, creatures<br>
 	Infinite fusion data gathered from <a title="I hope you guys don't mind me grabbing the pictures from your site!" href='https://aegide.github.io/'>aegide.github.io</a><br>
 	<!-- Ratings are subjective, ranging from 0 to 6. 0 means bad 6 means hoogh.<br>First number is how good they are as a base, and second number is if they have good design elements. -->
 	</p>
