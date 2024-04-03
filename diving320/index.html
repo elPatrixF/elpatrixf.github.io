@@ -1,0 +1,107 @@
+<html>
+<head>
+	<title>:3> bajo del mar</title>
+	
+	
+	<script>
+	function pixel(x, y, color, canvas)
+	{
+	canvas.fillStyle = color;
+	canvas.fillRect(x,y,1,1);
+	}
+
+	/* Randomize array in-place using Durstenfeld shuffle algorithm */
+	function shuffle(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+
+	</script>
+</head>
+	
+<body bgcolor=#000>
+<style>
+canvas
+{
+	/* border:0px solid #0080FF; */
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+	aspect-ratio: 4/3;
+	height: 100%;
+	image-rendering: pixelated;
+}
+</style>
+<canvas id="canvas" width="320" height="200" ></canvas>
+
+<script>
+
+//Variables
+let O = [10000,10000,11000];
+let vw = 320;
+let vh = 200;
+let vd = 160;
+
+let a= 0;
+let c= 0;
+let d= 0;
+
+let t= 0;
+
+let X = [1,0,0]; //X normalized vector
+let Y = [0,1,0]; //Y normalized vector
+let Z = [0,0,1]; //Z normalized vector
+let E = [0,0,0]; //euler angles
+
+var canvas = document.getElementById("canvas").getContext("2d");
+//Shuffle pixels for grainy effect
+let A = [];
+for (i=0; i<64000;i++) {A[i] = i};
+shuffle(A);
+
+//Main loop
+var intervalId = window.setInterval(function(){  
+for (i = 0;i<320*20;i++)
+{
+	//a = (a+7)% 64000;
+	//Advance to next pixel
+	t = (t+1) % 64000;
+	a = A[t];
+	d = 255;
+	for (c=0;c<256;c++)
+	{
+		if	((( ( O[0] + ( c/4 + 1 ) * ( ( a % 320 - 160 ) * X[0] + ( ~~(a / 320) - 100 ) * X[1] + ( vd ) * X[2] ) ) / 500 ) % 3) < 1)
+		if	((( ( O[1] + ( c/4 + 1 ) * ( ( a % 320 - 160 ) * Y[0] + ( ~~(a / 320) - 100 ) * Y[1] + ( vd ) * Y[2] ) ) / 500 ) % 3) < 1)
+		if	((( ( O[2] + ( c/4 + 1 ) * ( ( a % 320 - 160 ) * Z[0] + ( ~~(a / 320) - 100 ) * Z[1] + ( vd ) * Z[2] ) ) / 500 ) % 3) < 1)
+		{
+			d = c;
+			break;
+		}
+	}
+
+	pixel(a % 320, ~~(a/320), "rgb(0 "+d+" 255)", canvas );
+}
+	O[0]+=4;
+	O[1]+=5;
+	O[2]+=3;
+	E[0]+=0.003;
+	Z[0]= Math.sin(E[0]);
+	Z[2]= Math.cos(E[0]);
+	X[0]= Math.cos(E[0]);
+	X[2]= 0-Math.sin(E[0]);
+
+}, 16);
+
+//for (let a = 0;a<64000;a++) {pixel(a % 320,~~(a/320),"#"+a,canvas)};
+
+</script>
+
+
+</body>
+</html>
