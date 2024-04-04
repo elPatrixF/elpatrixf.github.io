@@ -7,6 +7,8 @@
 	
 	<!--
 	This was written by elPatrixF.
+	4/4/2024
+	
 	it is extremely basic and very very slow, but it works :3>  
 	
 	Héll Mood on Youtube https://www.youtube.com/watch?v=qvIk6fY0v18 
@@ -31,6 +33,7 @@
         array[i] = array[j];
         array[j] = temp;
     }
+
 }
 
 	</script>
@@ -49,6 +52,7 @@ canvas
 	aspect-ratio: 4/3;
 	height: 100%;
 	image-rendering: pixelated;
+	background-color:#0000FF;
 }
 </style>
 <canvas id="canvas" width="320" height="200" ></canvas>
@@ -72,6 +76,8 @@ var Y = [0,1,0]; //Y unit vector
 var Z = [0,0,1]; //Z unit vector
 var E = [0,0,0]; //Euler angles, only yaw is used right now
 
+var selected = 0;//toggle scene
+
 var canvas = document.getElementById("canvas").getContext("2d");
 
 //Put pixels on an array and shuffle it to get the random grainy effect.
@@ -84,53 +90,67 @@ var keys = []
 document.addEventListener('keydown', function(event) {keys[event.keyCode] = true;});
 document.addEventListener('keyup', function(event) {keys[event.keyCode] = false;});
 
+
 //Main loop
 var intervalId = window.setInterval(function(){  
 
-//KeyEvents	
-	if(keys[37]) {E[0]+=0.003;automatic = false;}   //left: turn left
-	if(keys[39]) {E[0]-=0.003;automatic = false;}	//right: turn right
-	if(keys[32]) {automatic = true;}	//spacebar: turn automatic camera back on
-	if(keys[65]) {O[0]-=X[0]*10;O[1]+=X[1]*10;O[2]+=X[2]*10;automatic = false;} //A: Go Left 
-	if(keys[68]) {O[0]+=X[0]*10;O[1]-=X[1]*10;O[2]-=X[2]*10;automatic = false;} //D: Go Right
-	if(keys[70]) {O[0]-=Y[0]*10;O[1]+=Y[1]*10;O[2]+=Y[2]*10;automatic = false;} //R: Go up
-	if(keys[82]) {O[0]+=Y[0]*10;O[1]-=Y[1]*10;O[2]-=Y[2]*10;automatic = false;} //F: Go down
-	if(keys[87]||keys[38]) {O[0]-=Z[0]*10;O[1]+=Z[1]*10;O[2]+=Z[2]*10;automatic = false;} //W/Up: Go Forward
-	if(keys[83]||keys[40]) {O[0]+=Z[0]*10;O[1]-=Z[1]*10;O[2]-=Z[2]*10;automatic = false;} //S/Down: Go Backward
-	if(keys[84]) {vd+=1} //T: Zoom in
-	if(keys[71]) {vd-=1} //G: Zoom out
-	
-for (i = 0;i<320*20;i++)
-{
-	//Advance to next pixel
-	t = (t+1) % 64000; 
-	a = A[t]; //get pixel number
-	d = 255; 
-	for (c=0;c<256;c++) //Ray marching loop
-	{	//Camera Origin + Random noise + Ray Marching step (/4 to add precision) * Corresponding Pixel Vector % 3 < 1 -> Results in the cubes pattern.
-		//This pattern breaks when any coordinate is <0, which produces infinite cubes in the negatives.
-		//~~(a/320) is a way to force integer division
-		if	((( ( O[0] +~~(Math.random() * 15) + ( c/4 + 1 ) * ( ( a % 320 - 160 ) * X[0] + ( ~~(a / 320) - 100 ) * X[1] + ( vd ) * X[2] ) ) / 500 ) % 3) < 1)
-		if	((( ( O[1] +~~(Math.random() * 15)+ ( c/4 + 1 ) * ( ( a % 320 - 160 ) * Y[0] + ( ~~(a / 320) - 100 ) * Y[1] + ( vd ) * Y[2] ) ) / 500 ) % 3) < 1)
-		if	((( ( O[2] +~~(Math.random() * 15)+ ( c/4 + 1 ) * ( ( a % 320 - 160 ) * Z[0] + ( ~~(a / 320) - 100 ) * Z[1] + ( vd ) * Z[2] ) ) / 500 ) % 3) < 1)
-		{
-			//When hitting a cube, break and color with the distance
-			d = c;
-			//d = c*2-128; Alternate formula using dark colors
-			break;
+	//KeyEvents	(key[16] is Shift, hold down for fast)
+	if(keys[36]) 			{E=[0,0,0];O = [10000,10000,11000];}   //left: turn left
+	if(keys[37]) 			{E[0]+=0.003*(1+~~keys[16]*9);automatic = false;}   //left: turn left
+	if(keys[39]) 			{E[0]-=0.003*(1+~~keys[16]*9);automatic = false;}	//right: turn right
+	if(keys[32]) 			{automatic = true;}	//spacebar: turn automatic camera back on
+	if(keys[65]) 			{O[0]-=X[0]*10*(1+~~keys[16]*9);O[1]+=X[1]*10*(1+~~keys[16]*9);O[2]+=X[2]*10*(1+~~keys[16]*9);automatic = false;} //A: Go Left 
+	if(keys[68]) 			{O[0]+=X[0]*10*(1+~~keys[16]*9);O[1]-=X[1]*10*(1+~~keys[16]*9);O[2]-=X[2]*10*(1+~~keys[16]*9);automatic = false;} //D: Go Right
+	if(keys[70]) 			{O[0]-=Y[0]*10*(1+~~keys[16]*9);O[1]+=Y[1]*10*(1+~~keys[16]*9);O[2]+=Y[2]*10*(1+~~keys[16]*9);automatic = false;} //R: Go up
+	if(keys[82]) 			{O[0]+=Y[0]*10*(1+~~keys[16]*9);O[1]-=Y[1]*10*(1+~~keys[16]*9);O[2]-=Y[2]*10*(1+~~keys[16]*9);automatic = false;} //F: Go down
+	if(keys[87]||keys[38]) 	{O[0]-=Z[0]*10*(1+~~keys[16]*9);O[1]+=Z[1]*10*(1+~~keys[16]*9);O[2]+=Z[2]*10*(1+~~keys[16]*9);automatic = false;} //W/Up: Go Forward
+	if(keys[83]||keys[40]) 	{O[0]+=Z[0]*10*(1+~~keys[16]*9);O[1]-=Z[1]*10*(1+~~keys[16]*9);O[2]-=Z[2]*10*(1+~~keys[16]*9);automatic = false;} //S/Down: Go Backward
+	if(keys[84]) 			{vd+=1*(1+~~keys[16]*9)} //T: Zoom in
+	if(keys[71]) 			{vd-=1*(1+~~keys[16]*9)} //G: Zoom out
+			
+	for (i = 0;i<320*20;i++)
+	{
+		//Advance to next pixel
+		t = (t+1) % 64000; 
+		a = A[t]; //get pixel number
+		d = 255; 
+		
+		/*if (selected == 1)
+		for (c=0;c<256;c++) //Ray marching loop
+		{	
+			if	checkCollision(0,0,0)
+			{
+				d = c;
+				break;
+			}
 		}
+		else*/
+		
+		for (c=0;c<256;c++) //Ray marching loop (default cubes)
+		{	//Camera Origin + Random noise + Ray Marching step (/4 to add precision) * Corresponding Pixel Vector % 3 < 1 -> Results in the cubes pattern.
+			//This pattern breaks when any coordinate is <0, which produces infinite cubes in the negatives.
+			//~~(a/320) is a way to force integer division
+			if	((( ( O[0] +~~(Math.random() * 15) + ( c/4 + 1 ) * ( ( a % 320 - 160 ) * X[0] + ( ~~(a / 320) - 100 ) * X[1] + ( vd ) * X[2] ) ) / 500 ) % 3) < 1)
+			if	((( ( O[1] +~~(Math.random() * 15)+ ( c/4 + 1 ) * ( ( a % 320 - 160 ) * Y[0] + ( ~~(a / 320) - 100 ) * Y[1] + ( vd ) * Y[2] ) ) / 500 ) % 3) < 1)
+			if	((( ( O[2] +~~(Math.random() * 15)+ ( c/4 + 1 ) * ( ( a % 320 - 160 ) * Z[0] + ( ~~(a / 320) - 100 ) * Z[1] + ( vd ) * Z[2] ) ) / 500 ) % 3) < 1)
+			{
+				//When hitting a cube, break and color with the distance
+				d = c;
+				//d = c*2-128; Alternate formula using dark colors
+				break;
+			}
+		}
+		
+		d-=~~(Math.random() * 15); //add some noise to the color
+		pixel(a % 320, ~~(a/320), "rgb(0 "+d+" "+(d+255)+")", canvas ); //paint pixel
 	}
-	
-	d-=~~(Math.random() * 15); //add some noise to the color
-	pixel(a % 320, ~~(a/320), "rgb(0 "+d+" "+(d+255)+")", canvas ); //paint pixel
-}
 	
 	if (automatic) //automatic camera movement
 	{
 	O[0]+=2;
 	O[1]+=2.5;
 	O[2]+=1.5;
-	E[0]+=0.0015;
+	E[0]+=0.002;
 	}
 	
 	//Calculate rotation
@@ -140,7 +160,7 @@ for (i = 0;i<320*20;i++)
 	X[2]= 0-Math.sin(E[0]);
 
 
-}, 33); //~30fps
+}, 35); //~30fps
 
 </script>
 
