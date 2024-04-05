@@ -6,12 +6,14 @@
 	<meta property="og:image" content="https://elpatrixf.com/diving320/pic.png">
 	
 	<!--
-	This was written by elPatrixF.
-	4/4/2024
+	This was written by elPatrixF over the course of a couple days.
+	April 5th 2024
 	
-	it is extremely basic and very very slow, but it works :3>  
+	It is extremely basic and very slow, but it works :3>  
 	
-	Héll Mood on Youtube https://www.youtube.com/watch?v=qvIk6fY0v18 
+	Inspired by Héll Mood's Atlantis intro, watch on Youtube https://www.youtube.com/watch?v=qvIk6fY0v18 
+	Hell it would be more accurate to say I'm pretty much trying to replicate the effects from scratch lmao
+	
 	pouet: https://www.pouet.net/prod.php?which=94197
 	
 	-->
@@ -32,15 +34,48 @@
         var temp = array[i];
         array[i] = array[j];
         array[j] = temp;
-    }
+		}
+	}
+	//random integer
+	function random(n)
+	{
+		return ~~(n * Math.random());
+	}
 
-}
 
 	</script>
 </head>
 	
-<body bgcolor=#000>
+<body>
 <style>
+body
+{
+	background: black;
+	color: white;
+}
+#fps
+{
+	text-align: right;
+	position: absolute;
+    top:10px;
+    right:10px;
+    width:1000px;
+	font-size:12px;
+}
+.help
+{
+	text-align: left;
+	position: absolute;
+    top:10px;
+    left:10px;
+    width:1000px;
+	font-size:12px;
+	filter: 
+        drop-shadow( 1px  0px 0px black) 
+        drop-shadow(-1px  0px 0px black)
+        drop-shadow( 0px  1px 0px black) 
+        drop-shadow( 0px -1px 0px black);
+}
 canvas
 {
 	/* border:0px solid #0080FF; */
@@ -51,32 +86,180 @@ canvas
     display: block;
 	aspect-ratio: 4/3;
 	height: 100%;
+    width: auto;
 	image-rendering: pixelated;
 	background-color:#0000FF;
 }
+.yt
+{
+	position: absolute;
+	bottom:20px;
+	opacity: 20%;
+}
 </style>
+
+
+<!-- <iframe class="yt" style='width:220px; height:160px;' src="https://www.youtube.com/embed/qvIk6fY0v18?si=b8hf8wL3N3uRjiWq&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> <!-- -->
+<!-- <iframe class="yt" style='width:220px; height:160px;' src="https://www.youtube.com/embed/vJBTTYySeEg?si=KIirzW2Fd0BS0TkQ&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> <!-- -->
+
+<span id="fps" hidden>0</span>
+<span id="welcome" class="help">Press H for info.</span>
+<span id="help" class="help" hidden>
+H: Show/Hide help and debug text<br>
+WASD: Movement<br>
+Hold down SHIFT to go faster<br>
+<br>
+Q/E: Turn left right<br>
+Arrow keys: Turn and movement<br>
+R/F: Go Up and Down<br>
+T/G: Zoom in and out<br>
+<br>
+PageUp/PageDown: Look up or down<br>
+Home/End: Tilt left or right<br>
+(Doesn't work too well)<br>
+<br>
+1: Toggle Autocam on/off<br>
+2: Toggle Pattern repeat infinitely<br>
+3: Toggle outside wall (when repeat is off)<br>
+4: Reset position to center of structure<br>
+5: Reset position to origin<br>
+6: Jump to a random location<br>
+7: Toggle teleports during autocam<br>
+
+9: Generate random scene<br>
+M: Turn music off<br>
+Del: Reset camera orientation<br>
+<br>
+Credits:<br>
+Based on <a href="https://www.youtube.com/channel/UCPaS1ses8jvikA1KnmwBMuQ">Héll Mood</a>'s Atlantis intro.<br>
+[<a href="https://www.youtube.com/watch?v=qvIk6fY0v18">Watch here</a>][<a href="https://www.pouet.net/prod.php?which=94197">pouet</a>]<br>
+<br>
+I liked that 256b intro so much that I wanted to see if I could replicate it from scratch.<br>
+I prooobably should've asked for permission before posting it online 💦 but- it's here now.<br>
+Learned a lot about ray marching, bitwise operators, algebra, javascript shenanigans, and other stuff.<br>
+Of course mine is not only way heavier than 256 bytes, but also is way slower, but! it was fun to make.<br>
+<br>
+The camera rotation doesn't work correctly still... but I'm too tired to figure that out right now.<br>
+See source for more information!<br>
+</span>
 <canvas id="canvas" width="320" height="200" ></canvas>
 
 <script>
 
+/* Paints the center of a 3D array 3x3x3*/
+function menger(A,mode)
+{
+	let M = new Array(A.length*3)
+    .fill().map(() => new Array(A.length*3)
+		.fill().map(() => new Array(A.length*3).fill(false)));
+	
+	//Copy edges
+	for(let q=0;q<3;q++){
+	for(let m=0;m<3;m++){
+	for(let p=0;p<3;p++){
+				//if(((q&1&m&1)&(~p)&1)|((q^m)&1&(~p))){
+				//if((~(q|m|p)>>0)&1){    //dust
+				//if(((q&m)|(q&p)|(p&m))&1){ //Crosses
+				if	(	 (mode==0)										|	//Copy
+						((mode==1) & ((		~(q^m^p)			)&1))	|	//XOR Fractal
+						((mode==2) & (~( 	(q&m)|(q&p)|(p&m)	)&1))	|	//Menger Sponge
+						((mode==3) & (( 	(q&m)|(q&p)|(p&m)	)&1))	|	//Reverse Menger Sponge (Crosses)
+						((mode==4) & ((		~(q|m|p)			)&1))	|	//Cantor Dust
+						((mode==5) & ((		 (q|m|p)			)&1))	|	//Reverse Cantor Dust
+						((mode==6) & ((		((q+m+p)>3) 	 	)))		|	//Sierpinki Pyramid
+						((mode==7) & ((		((q+m+p)<4) 	 	)))		|	//Upside down Sierpinki Pyramid
+						((mode==8) & (	(q==1)&(p==1)&(m==1)	))		)	//Only center
+				{
+					for(let i = 0;i<A.length;i++){
+					for(let j = 0;j<A.length;j++){
+					for(let k = 0;k<A.length;k++){
+								M[i+(q*A.length)][j+(m*A.length)][k+(p*A.length)] = A[i][j][k];
+								//M[i][j][k] = A[i][j][k];
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	return M;
+}
+
+function makeMenger(A) //A is an Array
+{
+	M = [[[true]]];
+	console.log("Making menger scene with parameters: ",A);
+	while (A.length > 0) {M = menger(M,A.pop());}
+	return M;
+}
+
+function mix(A,B,n) //Merge two 3-D arrays, MergeMenger
+{
+	/*If n==1, use AND operator
+	  If n==-1, use NAND operator
+	  If n==2 use XOR operator
+	  Otherwise use OR operator*/
+	let C = new Array(A.length)
+    .fill().map(() => new Array(A.length)
+		.fill().map(() => new Array(A.length).fill(false)));
+	
+	for(let i = 0;i<A.length;i++){
+		for(let j = 0;j<A.length;j++){
+			for(let k = 0;k<A.length;k++){
+			
+				if 		(n==1)	{C[i][j][k] = A[i][j][k] & B[i][j][k]}
+				else if	(n==-1)	{C[i][j][k] = A[i][j][k] & !(B[i][j][k])}
+				else if	(n==2)	{C[i][j][k] = A[i][j][k] ^ B[i][j][k]}
+				else 			{C[i][j][k] = A[i][j][k] | B[i][j][k]}
+			}
+		}
+	}
+	return C;
+}
+
+//Create sponge
+//M = makeMenger([6,6,6,3]);
+//M = mix(makeMenger([6,6,0,3]),makeMenger([3,3,3,3]),2);
+M = mix(makeMenger([4,6,5,3]),makeMenger([8,2,2,2]),0);
+
+var repeat = true; //toggle repeat of patterns
+var walls = false; //toggle rendering of outside walls, for quicker rendering.
+
 //Variables
-var O = [10000,10000,11000]; //camera origin
-var vw = 320; //unused, viewport width
-var vh = 200; //unused, viewport height
+var O = [35700, 42019, 23908]; //[41400,41400,23900]; //camera origin
+const vw = 320; //unused, viewport width
+const vh = 200; //unused, viewport height
 var vd = 160; //viewport distance
+var rd = 256; //render distance
 
 var a= 0;
+var b= 0;
 var c= 0;
+
 var d= 0;
+var red= 0;
+var r= 0;
+
+var fps = 0; //Debug, fps
+var fps_delta = 0; //Debug, delta time in ms
+
 var automatic = true; //toggle automatic camera
+var jumpEveryFewSeconds = true; //randomly teleport every 20 seconds
+var demoCam = [0,6,-7,0.002,0.0004,-0.0007]; //Automatic movement of camera
+
 var t= 0; //
 
 var X = [1,0,0]; //X unit vector
 var Y = [0,1,0]; //Y unit vector
 var Z = [0,0,1]; //Z unit vector
-var E = [0,0,0]; //Euler angles, only yaw is used right now
 
-var selected = 0;//toggle scene
+var x0 = 0; //Temporary values to make the formula less painful to read
+var y0 = 0; 
+
+var x1 = 0;
+var y1 = 0;
+var z1 = 0; 
 
 var canvas = document.getElementById("canvas").getContext("2d");
 
@@ -86,81 +269,274 @@ for (i=0; i<64000;i++) {A[i] = i};
 shuffle(A);
 
 //Keyboard input
+var shift = 0;
 var keys = []
-document.addEventListener('keydown', function(event) {keys[event.keyCode] = true;});
-document.addEventListener('keyup', function(event) {keys[event.keyCode] = false;});
+document.addEventListener('keydown', function(event)
+	{
+	keys[event.keyCode] = true;
+	if (event.keyCode == 72)	{
+								document.getElementById("welcome").hidden = true;
+								document.getElementById("fps").hidden = !document.getElementById("fps").hidden;
+								document.getElementById("help").hidden = !document.getElementById("help").hidden;
+								}
+	if (event.keyCode == 77)	{document.getElementsByClassName("yt")[0].remove();}
+	if (event.keyCode == 49)	{automatic = !automatic;}
+	if (event.keyCode == 50)	{repeat = !repeat;}
+	if (event.keyCode == 51)	{walls = !walls;}
+	if (event.keyCode == 46) 	{
+								X = [1,0,0]; 
+								Y = [0,1,0]; 
+								Z = [0,0,1];
+								}   //reset camera
+	if (event.keyCode == 52) 	{
+								O = [41400,41400,41400];
+								X = [1,0,0]; 
+								Y = [0,1,0]; 
+								Z = [0,0,1];
+								}   //reset
+	if (event.keyCode == 53)	{
+								O = [0,0,0];
+								X = [1,0,0]; 
+								Y = [0,1,0]; 
+								Z = [0,0,1];
+								}   
+	if (event.keyCode == 54)	{randomPosition();}
+	if (event.keyCode == 55)	{jumpEveryFewSeconds = !jumpEveryFewSeconds;}
+	if (event.keyCode == 57)	{M = mix(makeMenger([random(9),random(9),random(9),random(9)]),makeMenger([random(9),random(9),random(9),random(9)]),2);}
+	});
+
+document.addEventListener('keyup', function(event)
+	{
+	keys[event.keyCode] = false;
+	});
 
 
-//Main loop
+//
+//Affine rotation :3>
+//
+function  yaw(j){
+	let A = [X[0],X[1],X[2]];
+	let B = [Z[0],Z[1],Z[2]];	//Declare temporary vectors
+	
+	X[0] = A[0]+B[0]*j;		X[1] = A[1]+B[1]*j;		X[2] = A[2]+B[2]*j;	//Add vectors to each other
+	Z[0] = B[0]-A[0]*j;		Z[1] = B[1]-A[1]*j;		Z[2] = B[2]-A[2]*j;
+	
+	//Normalize vectors
+	//I hate having to use square root like this but I don't know if i have a choice here...
+	//Maybe trigonometry might be faster but oh well, it's only once per frame.
+	A = [X[0],X[1],X[2],1];		B = [Z[0],Z[1],Z[2],1];
+	A[3] = Math.sqrt(A[0]*A[0]+A[1]*A[1]+A[2]*A[2]);	X[0] /= A[3];	X[1] /= A[3];	X[2] /= A[3];
+	B[3] = Math.sqrt(B[0]*B[0]+B[1]*B[1]+B[2]*B[2]);	Z[0] /= B[3];	Z[1] /= B[3];	Z[2] /= B[3];
+}
+function  pitch(j){
+	let A = [Y[0],Y[1],Y[2]];
+	let B = [Z[0],Z[1],Z[2]];	//Declare temporary vectors
+	
+	Y[0] = A[0]+B[0]*j;		Y[1] = A[1]+B[1]*j;		Y[2] = A[2]+B[2]*j;	//Add vectors to each other
+	Z[0] = B[0]-A[0]*j;		Z[1] = B[1]-A[1]*j;		Z[2] = B[2]-A[2]*j;
+	
+	//Normalize vectors
+	//I hate having to use square root like this but I don't know if i have a choice here...
+	//Maybe trigonometry might be faster but oh well, it's only once per frame.
+	A = [Y[0],Y[1],Y[2],1];		B = [Z[0],Z[1],Z[2],1];
+	A[3] = Math.sqrt(A[0]*A[0]+A[1]*A[1]+A[2]*A[2]);	Y[0] /= A[3];	Y[1] /= A[3];	Y[2] /= A[3];
+	B[3] = Math.sqrt(B[0]*B[0]+B[1]*B[1]+B[2]*B[2]);	Z[0] /= B[3];	Z[1] /= B[3];	Z[2] /= B[3];
+}
+function  roll(j){
+	let A = [X[0],X[1],X[2]];
+	let B = [Y[0],Y[1],Y[2]];	//Declare temporary vectors
+	
+	X[0] = A[0]+B[0]*j;		X[1] = A[1]+B[1]*j;		X[2] = A[2]+B[2]*j;	//Add vectors to each other
+	Y[0] = B[0]-A[0]*j;		Y[1] = B[1]-A[1]*j;		Y[2] = B[2]-A[2]*j;
+	
+	//Normalize vectors
+	//I hate having to use square root like this but I don't know if i have a choice here...
+	//Maybe trigonometry might be faster but oh well, it's only once per frame.
+	A = [X[0],X[1],X[2],1];		B = [Y[0],Y[1],Y[2],1];
+	A[3] = Math.sqrt(A[0]*A[0]+A[1]*A[1]+A[2]*A[2]);	X[0] /= A[3];	X[1] /= A[3];	X[2] /= A[3];
+	B[3] = Math.sqrt(B[0]*B[0]+B[1]*B[1]+B[2]*B[2]);	Y[0] /= B[3];	Y[1] /= B[3];	Y[2] /= B[3];
+}
+
+//Shuffle the camera and place it in a random position and orientation
+function randomPosition()
+{
+	O = [random(82800),random(82800),random(82800)];
+	X = [1,0,0]; 
+	Y = [0,1,0]; 
+	Z = [0,0,1];
+
+	yaw(Math.random()-0.5);
+	pitch(Math.random()-0.5);
+	roll(Math.random()-0.5);
+	
+	yaw(Math.random()-0.5);
+	pitch(Math.random()-0.5);
+	roll(Math.random()-0.5);
+	
+	yaw(Math.random()-0.5);
+	pitch(Math.random()-0.5);
+	roll(Math.random()-0.5);
+	
+	demoCam = [random(41)-20,random(41)-20,random(41)-20,Math.random()*0.004-0.002,Math.random()*0.0004-0.0002,Math.random()*0.0014-0.00007];
+}
+
+//Preset
+O= [7359, 66529, 18014];
+X= [0.6979562884970483, -0.5323602445560217, 0.4790089658489471];
+Y= [0.7015916459980969, 0.37416262593428395, -0.6064416638223683];
+Z= [0.14361817995332904, 0.7593384616692436, 0.6346486579334112];
+
+demoCam = [5,-10,1,0.002,0.0015,0.0009];
+
+
+/*O= [47513, 68131, 12672];
+X= [0.9252785872667798, 0.20787679644201212, 0.3172487564145813];
+Y= [-0.3156902029842642, 0.8857129360033109, 0.34037081357858673];
+Z= [-0.21023613315828021, -0.41509014984386394, 0.8851558822135526];*/
+
+
+//	   *********************************
+//	************   Main loop   ************
+//	   *********************************
+
 var intervalId = window.setInterval(function(){  
 
+	shift = 1;
+	if (keys[16]) {shift += 7;}	//shift modifier
+	
 	//KeyEvents	(key[16] is Shift, hold down for fast)
-	if(keys[36]) 			{E=[0,0,0];O = [10000,10000,11000];}   //left: turn left
-	if(keys[37]) 			{E[0]+=0.003*(1+~~keys[16]*9);automatic = false;}   //left: turn left
-	if(keys[39]) 			{E[0]-=0.003*(1+~~keys[16]*9);automatic = false;}	//right: turn right
-	if(keys[32]) 			{automatic = true;}	//spacebar: turn automatic camera back on
-	if(keys[65]) 			{O[0]-=X[0]*10*(1+~~keys[16]*9);O[1]+=X[1]*10*(1+~~keys[16]*9);O[2]+=X[2]*10*(1+~~keys[16]*9);automatic = false;} //A: Go Left 
-	if(keys[68]) 			{O[0]+=X[0]*10*(1+~~keys[16]*9);O[1]-=X[1]*10*(1+~~keys[16]*9);O[2]-=X[2]*10*(1+~~keys[16]*9);automatic = false;} //D: Go Right
-	if(keys[70]) 			{O[0]-=Y[0]*10*(1+~~keys[16]*9);O[1]+=Y[1]*10*(1+~~keys[16]*9);O[2]+=Y[2]*10*(1+~~keys[16]*9);automatic = false;} //R: Go up
-	if(keys[82]) 			{O[0]+=Y[0]*10*(1+~~keys[16]*9);O[1]-=Y[1]*10*(1+~~keys[16]*9);O[2]-=Y[2]*10*(1+~~keys[16]*9);automatic = false;} //F: Go down
-	if(keys[87]||keys[38]) 	{O[0]-=Z[0]*10*(1+~~keys[16]*9);O[1]+=Z[1]*10*(1+~~keys[16]*9);O[2]+=Z[2]*10*(1+~~keys[16]*9);automatic = false;} //W/Up: Go Forward
-	if(keys[83]||keys[40]) 	{O[0]+=Z[0]*10*(1+~~keys[16]*9);O[1]-=Z[1]*10*(1+~~keys[16]*9);O[2]-=Z[2]*10*(1+~~keys[16]*9);automatic = false;} //S/Down: Go Backward
-	if(keys[84]) 			{vd+=1*(1+~~keys[16]*9)} //T: Zoom in
-	if(keys[71]) 			{vd-=1*(1+~~keys[16]*9)} //G: Zoom out
+	if(keys[37]||keys[81]) 	{yaw(-0.0025*shift) ;	automatic = false;}   //left: turn left
+	if(keys[39]||keys[69]) 	{yaw( 0.0025*shift) ;	automatic = false;}	//right: turn right
+
+	if(keys[33])		 	{pitch(-0.0025*shift) ;	automatic = false;}	//pgup
+	if(keys[34])		 	{pitch( 0.0025*shift) ;	automatic = false;}	//pgdn
+	
+	if(keys[36])		 	{roll(-0.0025*shift) ;	automatic = false;}	//home
+	if(keys[35])		 	{roll( 0.0025*shift) ;	automatic = false;}	//end
+	
+	if(keys[65]) 			{O[0]-=X[0]*10*shift;O[1]-=X[1]*10*shift;O[2]+=X[2]*10*shift;automatic = false;} //A: Go Left 
+	if(keys[68]) 			{O[0]+=X[0]*10*shift;O[1]+=X[1]*10*shift;O[2]-=X[2]*10*shift;automatic = false;} //D: Go Right
+	if(keys[82]) 			{O[0]-=Y[0]*10*shift;O[1]-=Y[1]*10*shift;O[2]+=Y[2]*10*shift;automatic = false;} //F: Go down
+	if(keys[70]) 			{O[0]+=Y[0]*10*shift;O[1]+=Y[1]*10*shift;O[2]-=Y[2]*10*shift;automatic = false;} //R: Go up
+	
+	if(keys[87]||keys[38]) 	{O[0]-=Z[0]*10*shift;O[1]-=Z[1]*10*shift;O[2]+=Z[2]*10*shift;automatic = false;} //W/Up: Go Forward
+	if(keys[83]||keys[40]) 	{O[0]+=Z[0]*10*shift;O[1]+=Z[1]*10*shift;O[2]-=Z[2]*10*shift;automatic = false;} //S/Down: Go Backward
+	
+	//if(keys[87]||keys[38]) 	{move(Z[0],0-Z[1],Z[2]);} //W
+	
+	if(keys[84]) 			{vd+=1*shift} //T: Zoom in
+	if(keys[71]) 			{vd-=1*shift} //G: Zoom out
 			
-	for (i = 0;i<320*20;i++)
+	
+	for (i = 0;i<320*16;i++)
 	{
 		//Advance to next pixel
 		t = (t+1) % 64000; 
 		a = A[t]; //get pixel number
-		d = 255; 
+		d = 255;
+		red = 0;
 		
-		/*if (selected == 1)
-		for (c=0;c<256;c++) //Ray marching loop
+		x0= a % 320 - 160;  //a % 320 - 160;
+		y0= ~~(a / 320) - 100;  //~~(a / 320) - 100;  the double bitwise NOT is a way to force integer division.
+		
+		r = random(32); //add some random noise to the ray
+		
+		for (c=1;c<rd;c++) //Ray marching loop (default cubes)
 		{	
-			if	checkCollision(0,0,0)
-			{
-				d = c;
-				break;
-			}
-		}
-		else*/
-		
-		for (c=0;c<256;c++) //Ray marching loop (default cubes)
-		{	//Camera Origin + Random noise + Ray Marching step (/4 to add precision) * Corresponding Pixel Vector % 3 < 1 -> Results in the cubes pattern.
-			//This pattern breaks when any coordinate is <0, which produces infinite cubes in the negatives.
-			//~~(a/320) is a way to force integer division
-			if	((( ( O[0] +~~(Math.random() * 15) + ( c/4 + 1 ) * ( ( a % 320 - 160 ) * X[0] + ( ~~(a / 320) - 100 ) * X[1] + ( vd ) * X[2] ) ) / 500 ) % 3) < 1)
-			if	((( ( O[1] +~~(Math.random() * 15)+ ( c/4 + 1 ) * ( ( a % 320 - 160 ) * Y[0] + ( ~~(a / 320) - 100 ) * Y[1] + ( vd ) * Y[2] ) ) / 500 ) % 3) < 1)
-			if	((( ( O[2] +~~(Math.random() * 15)+ ( c/4 + 1 ) * ( ( a % 320 - 160 ) * Z[0] + ( ~~(a / 320) - 100 ) * Z[1] + ( vd ) * Z[2] ) ) / 500 ) % 3) < 1)
+			//Calculate coordinates of current marching point in space
+			x1=~~( O[0] + r + c*(x0*X[0] + y0*X[1] + vd*X[2]) );
+			y1=~~( O[1] + r + c*(x0*Y[0] + y0*Y[1] + vd*Y[2]) );
+			z1=~~( O[2] + r + c*(x0*Z[0] + y0*Z[1] + vd*Z[2]) );
+			
+			/*
+			if (((a+y0)) & 1)
+			//This is the algorithm that draws the simple fast cubes pattern
+			//Camera Origin + Random noise + Ray Marching step * Corresponding Pixel Vector, shifted and masked < 3 -> Results in the cubes pattern.
+			//The shift and mask originally was division and modulo, but this is faster
+			//Bitwise shift right 9 is like dividing by 512 but faster.
+			
+			if	(((( x1 >> 9 ) >>1 & 6) < 3) && ((( y1 >> 9 ) >>1 & 6) < 3) && ((( z1 >> 9 ) >>1 & 6) < 3))
 			{
 				//When hitting a cube, break and color with the distance
-				d = c;
-				//d = c*2-128; Alternate formula using dark colors
+				d = (c-1);
+				if (c==1) d=-128; //Color differently if viewport is clipping (distance=0)
+				break;
+			}// */
+			
+			
+			//This alternate algorithm reads from a 3D array, which is much slower but allows for more interesting geometry.
+			if (!repeat){	//If set to not repeat pattern infinitely, just scale.
+				x1=(x1>>10);
+				y1=(y1>>10);
+				z1=(z1>>10);
+			}
+			else
+			{
+				//Scale and limit coordinates to array size
+				x1=(x1>>10) % M.length;
+				y1=(y1>>10) % M.length;
+				z1=(z1>>10) % M.length;
+				/* //Make modulo positive 
+				if (x1 < 0) x1 += M.length;
+				if (y1 < 0) y1 += M.length;
+				if (z1 < 0) z1 += M.length; /**/				
+				//Make modulo positive
+				if (x1 < 0) x1 = -x1;
+				if (y1 < 0) y1 = -y1;
+				if (z1 < 0) z1 = -z1; 
+			}
+			//-
+			if (!repeat &
+				(x1<0)|(x1>=M.length)|
+				(y1<0)|(y1>=M.length)|
+				(z1<0)|(z1>=M.length))
+			{	//If value falls outside of array...
+				d = rd-1;
+				if (walls) break;
+			}
+			else if (M[x1][y1][z1])
+			{
+				d = ((c-1)<<8)/rd;
+				//if (d<0) {d = d*-4;red=d>>1;}
+				if (c==1) d=-256; //Color differently if viewport is clipping (distance=0)
 				break;
 			}
 		}
 		
-		d-=~~(Math.random() * 15); //add some noise to the color
-		pixel(a % 320, ~~(a/320), "rgb(0 "+d+" "+(d+255)+")", canvas ); //paint pixel
+		//d-=random(15); //add some noise to the color
+		pixel(x0+160, y0+100, "rgb("+red+" "+(d)+" "+(((d*16+128)))+")", canvas ); //paint pixel
+		//pixel(x0+160, y0+100, "rgb("+(d)+" "+(d)+" "+(d)+")", canvas ); //paint pixel
 	}
 	
 	if (automatic) //automatic camera movement
 	{
-	O[0]+=2;
-	O[1]+=2.5;
-	O[2]+=1.5;
-	E[0]+=0.002;
+		O[0] += demoCam[0];
+		O[1] += demoCam[1];
+		O[2] += demoCam[2];
+		yaw(demoCam[3]);
+		pitch(demoCam[4]);
+		roll(demoCam[5]);
+		
 	}
 	
-	//Calculate rotation
-	Z[0]= Math.sin(E[0]);
-	Z[2]= Math.cos(E[0]);
-	X[0]= Math.cos(E[0]);
-	X[2]= 0-Math.sin(E[0]);
+	//Output debug information
+	document.getElementById("fps").innerHTML = ~~((10002)/(performance.now()-fps_delta))/10 +" FPS";
+	fps_delta = performance.now();
+	document.getElementById("fps").innerHTML += "<br> O= ["+~~O[0]+", "+~~O[1]+", "+~~O[2]+"];<br>";
+	document.getElementById("fps").innerHTML += "<br> X= ["+X[0]+", "+X[1]+", "+X[2]+"];";
+	document.getElementById("fps").innerHTML += "<br> Y= ["+Y[0]+", "+Y[1]+", "+Y[2]+"];";
+	document.getElementById("fps").innerHTML += "<br> Z= ["+Z[0]+", "+Z[1]+", "+Z[2]+"];<br>";
+	document.getElementById("fps").innerHTML += "<br><br> Auto Camera: ["+automatic+"]";
+	document.getElementById("fps").innerHTML += "<br> demoCam: ["+demoCam[0]+", "+demoCam[1]+", "+demoCam[2]+", "+demoCam[3]+", "+demoCam[4]+", "+demoCam[5]+"]";
+	document.getElementById("fps").innerHTML += "<br> jumpEveryFewSeconds: ["+jumpEveryFewSeconds+"]<br>";
+	document.getElementById("fps").innerHTML += "<br> Repeat pattern infinitely: ["+repeat+"]";
+	document.getElementById("fps").innerHTML += "<br> Render outer walls: ["+walls+"]";
 
+}, 33); //~30fps
 
-}, 35); //~30fps
+var intervalId = window.setInterval(function(){  
+	if ((automatic) & (jumpEveryFewSeconds)) {randomPosition();document.getElementById("welcome").hidden = true;}
+}, 15000); //20 seconds
 
 </script>
 
