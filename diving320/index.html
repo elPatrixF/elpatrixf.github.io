@@ -61,6 +61,11 @@ body
     right:10px;
     width:1000px;
 	font-size:12px;
+	filter: 
+    drop-shadow( 1px  0px 0px black) 
+    drop-shadow(-1px  0px 0px black)
+    drop-shadow( 0px  1px 0px black) 
+	drop-shadow( 0px -1px 0px black);
 }
 .help
 {
@@ -71,10 +76,10 @@ body
     width:1000px;
 	font-size:12px;
 	filter: 
-        drop-shadow( 1px  0px 0px black) 
-        drop-shadow(-1px  0px 0px black)
-        drop-shadow( 0px  1px 0px black) 
-        drop-shadow( 0px -1px 0px black);
+    drop-shadow( 1px  0px 0px black) 
+    drop-shadow(-1px  0px 0px black)
+    drop-shadow( 0px  1px 0px black) 
+	drop-shadow( 0px -1px 0px black);
 }
 canvas
 {
@@ -114,6 +119,8 @@ Arrow keys: Turn and movement<br>
 R/F: Go Up and Down<br>
 T/G: Zoom in and out<br>
 <br>
+Delete: Reset camera orientation<br>
+<br>
 PageUp/PageDown: Look up or down<br>
 Home/End: Tilt left or right<br>
 (Doesn't work too well)<br>
@@ -121,15 +128,16 @@ Home/End: Tilt left or right<br>
 1: Toggle Autocam on/off<br>
 2: Toggle Pattern repeat infinitely<br>
 3: Toggle outside wall (when repeat is off)<br>
+<br>
 4: Reset position to center of structure<br>
 5: Reset position to origin<br>
 6: Jump to a random location<br>
 7: Toggle teleports during autocam<br>
-
+<br>
 8: Change palette<br>
 9: Generate random scene<br>
+<br>
 M: Turn music off<br>
-Del: Reset camera orientation<br>
 <br>
 Credits:<br>
 Based on <a href="https://www.youtube.com/channel/UCPaS1ses8jvikA1KnmwBMuQ">Héll Mood</a>'s Atlantis intro.<br>
@@ -187,16 +195,18 @@ function menger(A,mode)
 	return M;
 }
 
+var lastGen= [];
 function makeMenger(A) //A is an Array
 {
 	M = [[[true]]];
-	console.log("Making menger scene with parameters: ",A);
+	lastGen.push("Making menger scene with parameters: "+A);
 	while (A.length > 0) {M = menger(M,A.pop());}
 	return M;
 }
 
 function mix(A,B,n) //Merge two 3-D arrays, MergeMenger
 {
+	lastGen.push("Merging last two with operator "+n);
 	/*If n==1, use AND operator
 	  If n==-1, use NAND operator
 	  If n==2 use XOR operator
@@ -540,6 +550,8 @@ var intervalId = window.setInterval(function(){
 	document.getElementById("fps").innerHTML += "<br> jumpEveryFewSeconds: ["+jumpEveryFewSeconds+"]<br>";
 	document.getElementById("fps").innerHTML += "<br> Repeat pattern infinitely: ["+repeat+"]";
 	document.getElementById("fps").innerHTML += "<br> Render outer walls: ["+walls+"]";
+	document.getElementById("fps").innerHTML += "<br><br> "+lastGen[lastGen.length-3]+"<br>"+lastGen[lastGen.length-2]+"<br>"+lastGen[lastGen.length-1];
+	document.getElementById("fps").innerHTML += "<br>To replicate this scene, call makeMenger() and mix(). See source for more info.";
 
 }, 33); //~30fps
 
