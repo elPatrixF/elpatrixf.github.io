@@ -6,15 +6,15 @@
 	<meta property="og:image" content="https://elpatrixf.com/diving320/pic.png">
 	
 	<!--
-	This was written by elPatrixF over the course of a couple days.
-	April 5th 2024
+	This was written by elPatrixF (me!) over the course of a couple days.
+	April 6th 2024
 	
 	It is extremely basic and very slow, but it works :3>  
 	
 	Inspired by Héll Mood's Atlantis intro, watch on Youtube https://www.youtube.com/watch?v=qvIk6fY0v18 
-	Hell it would be more accurate to say I'm pretty much trying to replicate the effects from scratch lmao
-	
 	pouet: https://www.pouet.net/prod.php?which=94197
+	
+	Heck, it would be more accurate to say I'm pretty much trying to replicate the whole thing from scratch lmao
 	
 	-->
 	
@@ -90,10 +90,14 @@ canvas
     margin-right: auto;
     display: block;
 	aspect-ratio: 4/3;
-	height: 100%;
-    width: auto;
+	
+	width:100%;
+    height:100%;
+    object-fit: contain;
+    overflow: hidden;
+	
 	image-rendering: pixelated;
-	background-color:#0000FF;
+	background-color:#000000;
 }
 .yt
 {
@@ -140,7 +144,8 @@ Home/End: Tilt left or right<br>
 M: Turn music off<br>
 <br>
 Credits:<br>
-Based on <a href="https://www.youtube.com/channel/UCPaS1ses8jvikA1KnmwBMuQ">Héll Mood</a>'s Atlantis intro.<br>
+Coded by <u>elPatrixF</u><br>
+Closely copying <a href="https://www.youtube.com/channel/UCPaS1ses8jvikA1KnmwBMuQ">Héll Mood</a>'s Atlantis intro as visual reference.<br>
 [<a href="https://www.youtube.com/watch?v=qvIk6fY0v18">Watch here</a>][<a href="https://www.pouet.net/prod.php?which=94197">pouet</a>]<br>
 <br>
 I liked that 256b intro so much that I wanted to see if I could replicate it from scratch.<br>
@@ -155,7 +160,20 @@ See source for more information!<br>
 
 <script>
 
-/* Paints the center of a 3D array 3x3x3*/
+/* This function reads a NxNxN array of boolean, and outputs a MxMxM array where M = 3*n 
+	Basically takes an array and copies it in a 3x3x3 fashion, according to some rules
+	Call it recursively to produce Menger-sponge fractal-like geometry.
+	
+	The mode parameter defines what rule will be used during the copying.
+	For example Mode==2 is Menger sponge, so recursively calling the function
+	with that parameter will result in a menger sponge.
+	
+	M = [[[true]]];
+	M = menger(menger(menger(menger(M,2),2),2),2)
+	
+	a special function makeMenger([i,j,k,...]) is provided to make it simpler
+	to pass the parameters, so instead we can do M = makeMenger([2,2,2,2]) for the same effect.
+	*/
 function menger(A,mode)
 {
 	let M = new Array(A.length*3)
@@ -204,7 +222,10 @@ function makeMenger(A) //A is an Array
 	return M;
 }
 
-function mix(A,B,n) //Merge two 3-D arrays, MergeMenger
+/*	This function will combine two 3D arrays of equal size.
+	The parameter n will determine how they combine
+	(addition, intersection, substraction, etc.)*/
+function mix(A,B,n) 
 {
 	lastGen.push("Merging last two with operator "+n);
 	/*If n==1, use AND operator
@@ -229,9 +250,8 @@ function mix(A,B,n) //Merge two 3-D arrays, MergeMenger
 	return C;
 }
 
-//Create sponge
+//Create default design.
 //M = makeMenger([6,6,6,3]);
-//M = mix(makeMenger([6,6,0,3]),makeMenger([3,3,3,3]),2);
 M = mix(makeMenger([4,6,5,3]),makeMenger([8,2,2,2]),0);
 
 var repeat = true; //toggle repeat of patterns
@@ -257,7 +277,7 @@ var fps_delta = 0; //Debug, delta time in ms
 
 var automatic = true; //toggle automatic camera
 var jumpEveryFewSeconds = true; //randomly teleport every 20 seconds
-var demoCam = [0,6,-7,0.002,0.0004,-0.0007]; //Automatic movement of camera
+var demoCam = [0,6,-7,0.002,0.0004,-0.0007]; //Automatic movement of camera, this gets overwritten later...
 
 var t= 0; //
 
@@ -273,6 +293,8 @@ var y1 = 0;
 var z1 = 0; 
 
 var canvas = document.getElementById("canvas").getContext("2d");
+canvas.fillStyle = "#0000FF";
+canvas.fillRect(0,0,320,200);
 var palette= 0;
 
 //Put pixels on an array and shuffle it to get the random grainy effect.
@@ -299,18 +321,21 @@ document.addEventListener('keydown', function(event)
 								X = [1,0,0]; 
 								Y = [0,1,0]; 
 								Z = [0,0,1];
+								automatic = false;
 								}   //reset camera
 	if (event.keyCode == 52) 	{
 								O = [41400,41400,41400];
 								X = [1,0,0]; 
 								Y = [0,1,0]; 
 								Z = [0,0,1];
+								automatic = false;
 								}   //reset
 	if (event.keyCode == 53)	{
 								O = [0,0,0];
 								X = [1,0,0]; 
 								Y = [0,1,0]; 
 								Z = [0,0,1];
+								automatic = false;
 								}   
 	if (event.keyCode == 54)	{randomPosition();}
 	if (event.keyCode == 55)	{jumpEveryFewSeconds = !jumpEveryFewSeconds;}
@@ -326,6 +351,8 @@ document.addEventListener('keyup', function(event)
 
 //
 //Affine rotation :3>
+//	Apparently the rotation of the camera works fine but for some reason the movement using the vectors is still wrong...
+// 	I gotta figure why is that some day.
 //
 function  yaw(j){
 	let A = [X[0],X[1],X[2]];
