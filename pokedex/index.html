@@ -149,7 +149,7 @@ extras[262] = "A plant and a puppy. Part 3.";
 	else if (hayParametro("e621")) document.write('e621.<br>Keep in mind that not all my art is posted to e621 so it might not show up there at all.');
 	else if (hayParametro("tumblr")) document.write('Tumblr.<br>Keep in mind though that my tumblr was nuked because of DMCA claims by you-know-who. So, 98% of the stuff is gone from there. You might want to try searching for them at <a href="pokedex">deviantart</a> instead)');
 	else if (hayParametro("bluesky")) document.write('Bluesky.<br>This is a relatively new account, 98% of the stuff is not posted there. You might want to try searching for them at <a href="pokedex">deviantart</a> instead)');
-	else document.write("<b>Furaffinity</b> (Click on advanced, and show <i>All time</i> results, most drawings are more than 5 years old by now...)");
+	else document.write("<b>Furaffinity</b> (If nothing shows up, click on advanced, and show <i>All time</i> results since most drawings are more than 5 years old by now.)");
 	
 	</script>.<p><i><u><font color="#FFFF00">
 	<!-- Because most robots can't read pictures--><img border="0" src="https://i.imgur.com/JooSWlp.png" width="1000" height="16"></font></u></i></p>
@@ -226,7 +226,7 @@ for (i = 1; i<=1025; i++)
  		else if (hayParametro("e621"))				document.write("<a href=\"https://e621.net/post/index/1/"+pokemon_names[i]+"%20elpatrixf\">");
 		else if ((hayParametro("tumblr")))			document.write("<a href=\"http://notfarts.tumblr.com/tagged/"+zeroFill(i,5)+"\">");
 		else if ((hayParametro("bluesky")))			document.write("<a href=\"https://bsky.app/profile/elpatrixf.com/search?q="+pokemon_names[i]+"\">");
- 		else 										document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf\">");
+ 		else 										document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf&page=1&perpage=72&order-by=relevancy&order-direction=desc&range=all&rating-general=1&rating-mature=1&rating-adult=1&type-art=1&type-music=1&type-flash=1&type-story=1&type-photo=1&type-poetry=1\">");
 
 		if (!(hayParametro("offline")))
 		{
@@ -263,7 +263,7 @@ for (i = 1; i<=1025; i++)
  		else if ((hayParametro("tumblr"))&&(i>99))	document.write("<a href=\"http://notfarts.tumblr.com/tagged/00"+i+"\">");
  		else if ((hayParametro("tumblr"))&&(i>9))	document.write("<a href=\"http://notfarts.tumblr.com/tagged/000"+i+"\">");
 		else if ((hayParametro("tumblr")))			document.write("<a href=\"http://notfarts.tumblr.com/tagged/0000"+i+"\">");
- 		else 										document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf\">");
+ 		else 										document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf&page=1&perpage=72&order-by=relevancy&order-direction=desc&range=all&rating-general=1&rating-mature=1&rating-adult=1&type-art=1&type-music=1&type-flash=1&type-story=1&type-photo=1&type-poetry=1\">");
 		
 		if (pokemon_list.substring(i-1, i) > 1) document.write(pokemon_names[i]+"</a>*");
 		else document.write(pokemon_names[i]+"</a>");
@@ -283,7 +283,7 @@ document.write("</div>");
 
 	document.write("<b><img src=\"https://i.imgur.com/C5PDzRr.gif\"> #0 "+pokemon_names[0]+"</b> - ");
 	if (hayParametro("DA"))		document.write("<a href=\"http://elpatrixf.deviantart.com/gallery/?catpath=%2F&q=%23missingno\">[Link!]</a> - "+extras[i]+"<br>");
-	else 						document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20missingno%20@lower%20elpatrixf\">[Link!]</a> - "+extras[i]+"<br>");
+	else 						document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20missingno%20@lower%20elpatrixf&page=1&perpage=72&order-by=relevancy&order-direction=desc&range=all&rating-general=1&rating-mature=1&rating-adult=1&type-art=1&type-music=1&type-flash=1&type-story=1&type-photo=1&type-poetry=1\">[Link!]</a> - "+extras[i]+"<br>");
 
 	for (i = 1; i<=1008; i++)
 	if ((extras[i]!=undefined)&&(pokemon_list.substring(i-1, i) != 0)){
@@ -333,7 +333,7 @@ document.write("</div>");
 			} else
 			{
 				if (extrasFA[i] != undefined) document.write("<a href=\""+extrasFA[i]+"\">[Direct link!]</a> - "+extras[i]+"<br>");
-				else document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf\">[Tag search]</a> - "+extras[i]+"<br>");
+				else document.write("<a href=\"http://www.furaffinity.net/search/?q=@keywords%20"+pokemon_names[i]+"%20@lower%20elpatrixf&page=1&perpage=72&order-by=relevancy&order-direction=desc&range=all&rating-general=1&rating-mature=1&rating-adult=1&type-art=1&type-music=1&type-flash=1&type-story=1&type-photo=1&type-poetry=1\">[Tag search]</a> - "+extras[i]+"<br>");
 	 		}
 		}
 	}
@@ -345,6 +345,6 @@ document.write("</div>");
 	<div class="random_selectors" align="center"><a href="https://notfarts.tumblr.com/pokedex/random"><img id="random" src="https://i.imgur.com/P7BNbII.png" title="Click here if you want to select a random pokemon."></a></div>
 <hr>
 <div align="left">
-<font color="#333333">v1.7.3 (Added Gen IX Pokemon from DLC) - Thanks <a href="http://veekun.com">veekun</a>, <a href="http://pokemon.com">Pokemon Website</a>, and <a href="https://www.serebii.net/">Serebii</a> for everything and sorry for any inconvenience!</font></div>
+<font color="#333333">v1.7.4 (Added Gen IX Pokemon from DLC, and fixed Furaffinity search) - Thanks <a href="http://veekun.com">veekun</a>, <a href="http://pokemon.com">Pokemon Website</a>, and <a href="https://www.serebii.net/">Serebii</a> for everything and sorry for any inconvenience!</font></div>
 </body>
  
