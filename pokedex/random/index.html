@@ -1,0 +1,273 @@
+<head>
+<meta http-equiv="Content-Language" content="es">
+<title>Pokedex Random Selector</title>
+<!-- Version 30, updated to paldea + dlc
+ I did NOT play AZ, sorry... -->
+
+
+<script>		
+		//Codigo para obtener parametros de URL
+		function getParametro(variable) {
+		    var query = window.location.search.substring(1);
+		    var vars = query.split('&');
+		    for (var i = 0; i < vars.length; i++) {
+		        var pair = vars[i].split('=');
+		        if (decodeURIComponent(pair[0]) == variable) {
+		            return decodeURIComponent(pair[1]);
+		        }
+		    }
+		    console.log('No se encontro el parametro %s', variable);
+		}
+		
+		function hayParametro(variable) {
+		    var query = window.location.search.substring(1);
+		    var vars = query.split('&');
+		    for (var i = 0; i < vars.length; i++) {
+		        var pair = vars[i].split('=');
+		        if (decodeURIComponent(pair[0]) == variable) {
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+		
+		function zeroFill( number, width )
+		{
+		  width -= number.toString().length;
+		  if ( width > 0 )
+		  {
+		    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+		  }
+		  return number + ""; // always return a string
+		}
+		
+		var myorigin;
+		if (hayParametro('noveekun')) myorigin = '../';
+//		else if (hayParametro('veekun')) myorigin = 'https://veekun.com/dex/media/pokemon/main-sprites/ultra-sun-ultra-moon/';
+		//else myorigin = 'https://www.serebii.net/scarletviolet/pokemon/';
+		else myorigin = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/';
+
+</script>
+
+</head>
+
+<body bgcolor=#FFFFFF text="#000000" background="http://veekun.com/static/local/images/layout/background.png" onkeydown="keyDown();" onkeyup="keyUp();">
+<style>
+div
+{
+	font-family: Verdana, sans-serif;
+	font-size: 9px;
+    color: #775B44;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+p
+{
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+#big
+{
+    font: bold 24px Trebuchet MS,sans-serif;
+}
+</style>
+
+<script>
+var pokemon_list = "111111111101111101110111111011111111111111111110100111100111001100100011011001001110001011111101110110111110111011110110000001001110111111111111111111111101100001010011011110011011111101111011011111011111001110110110011001111101101111101111100010111110011111111111001201100000120111010100000111110111111021110111111101100100001111110111111100100101110111111011010000110111000000111111110100110001201100111110000001111111011101111100000000101011111000001101110111000101111101101110111100111011111011101010011011101102000110100011001100101001011010011110100111001110101111110010001001111110000101110100100111111111001001011000001100111111100000110111111111111112111111101100111100101001111000110111111101010111011101111111100011011120000001000001201010101110202001120002001000000020010000000000010000000000002000001120000000000012021000001000000101000010011000100000000010001002000000000000000000000000000001010000001100000000000000000000000000000100000000000000000000001000000000000000000000000000000";
+var pokemon_amount = 522; 
+var googleworks = false;
+
+var pokemon_names = ["missingno", "Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard", "Squirtle", "Wartortle", "Blastoise", "Caterpie", "Metapod", "Butterfree", "Weedle", "Kakuna", "Beedrill", "Pidgey", "Pidgeotto", "Pidgeot", "Rattata", "Raticate", "Spearow", "Fearow", "Ekans", "Arbok", "Pikachu", "Raichu", "Sandshrew", "Sandslash", "Nidoran female", "Nidorina", "Nidoqueen", "Nidoran male", "Nidorino", "Nidoking", "Clefairy", "Clefable", "Vulpix", "Ninetales", "Jigglypuff", "Wigglytuff", "Zubat", "Golbat", "Oddish", "Gloom", "Vileplume", "Paras", "Parasect", "Venonat", "Venomoth", "Diglett", "Dugtrio", "Meowth", "Persian", "Psyduck", "Golduck", "Mankey", "Primeape", "Growlithe", "Arcanine", "Poliwag", "Poliwhirl", "Poliwrath", "Abra", "Kadabra", "Alakazam", "Machop", "Machoke", "Machamp", "Bellsprout", "Weepinbell", "Victreebel", "Tentacool", "Tentacruel", "Geodude", "Graveler", "Golem", "Ponyta", "Rapidash", "Slowpoke", "Slowbro", "Magnemite", "Magneton", "Farfetchd", "Doduo", "Dodrio", "Seel", "Dewgong", "Grimer", "Muk", "Shellder", "Cloyster", "Gastly", "Haunter", "Gengar", "Onix", "Drowzee", "Hypno", "Krabby", "Kingler", "Voltorb", "Electrode", "Exeggcute", "Exeggutor", "Cubone", "Marowak", "Hitmonlee", "Hitmonchan", "Lickitung", "Koffing", "Weezing", "Rhyhorn", "Rhydon", "Chansey", "Tangela", "Kangaskhan", "Horsea", "Seadra", "Goldeen", "Seaking", "Staryu", "Starmie", "mrmime", "Scyther", "Jynx", "Electabuzz", "Magmar", "Pinsir", "Tauros", "Magikarp", "Gyarados", "Lapras", "Ditto", "Eevee", "Vaporeon", "Jolteon", "Flareon", "Porygon", "Omanyte", "Omastar", "Kabuto", "Kabutops", "Aerodactyl", "Snorlax", "Articuno", "Zapdos", "Moltres", "Dratini", "Dragonair", "Dragonite", "Mewtwo", "Mew", "Chikorita", "Bayleef", "Meganium", "Cyndaquil", "Quilava", "Typhlosion", "Totodile", "Croconaw", "Feraligatr", "Sentret", "Furret", "Hoothoot", "Noctowl", "Ledyba", "Ledian", "Spinarak", "Ariados", "Crobat", "Chinchou", "Lanturn", "Pichu", "Cleffa", "Igglybuff", "Togepi", "Togetic", "Natu", "Xatu", "Mareep", "Flaaffy", "Ampharos", "Bellossom", "Marill", "Azumarill", "Sudowoodo", "Politoed", "Hoppip", "Skiploom", "Jumpluff", "Aipom", "Sunkern", "Sunflora", "Yanma", "Wooper", "Quagsire", "Espeon", "Umbreon", "Murkrow", "Slowking", "Misdreavus", "Unown", "Wobbuffet", "Girafarig", "Pineco", "Forretress", "Dunsparce", "Gligar", "Steelix", "Snubbull", "Granbull", "Qwilfish", "Scizor", "Shuckle", "Heracross", "Sneasel", "Teddiursa", "Ursaring", "Slugma", "Magcargo", "Swinub", "Piloswine", "Corsola", "Remoraid", "Octillery", "Delibird", "Mantine", "Skarmory", "Houndour", "Houndoom", "Kingdra", "Phanpy", "Donphan", "Porygon2", "Stantler", "Smeargle", "Tyrogue", "Hitmontop", "Smoochum", "Elekid", "Magby", "Miltank", "Blissey", "Raikou", "Entei", "Suicune", "Larvitar", "Pupitar", "Tyranitar", "Lugia", "Hooh", "Celebi", "Treecko", "Grovyle", "Sceptile", "Torchic", "Combusken", "Blaziken", "Mudkip", "Marshtomp", "Swampert", "Poochyena", "Mightyena", "Zigzagoon", "Linoone", "Wurmple", "Silcoon", "Beautifly", "Cascoon", "Dustox", "Lotad", "Lombre", "Ludicolo", "Seedot", "Nuzleaf", "Shiftry", "Taillow", "Swellow", "Wingull", "Pelipper", "Ralts", "Kirlia", "Gardevoir", "Surskit", "Masquerain", "Shroomish", "Breloom", "Slakoth", "Vigoroth", "Slaking", "Nincada", "Ninjask", "Shedinja", "Whismur", "Loudred", "Exploud", "Makuhita", "Hariyama", "Azurill", "Nosepass", "Skitty", "Delcatty", "Sableye", "Mawile", "Aron", "Lairon", "Aggron", "Meditite", "Medicham", "Electrike", "Manectric", "Plusle", "Minun", "Volbeat", "Illumise", "Roselia", "Gulpin", "Swalot", "Carvanha", "Sharpedo", "Wailmer", "Wailord", "Numel", "Camerupt", "Torkoal", "Spoink", "Grumpig", "Spinda", "Trapinch", "Vibrava", "Flygon", "Cacnea", "Cacturne", "Swablu", "Altaria", "Zangoose", "Seviper", "Lunatone", "Solrock", "Barboach", "Whiscash", "Corphish", "Crawdaunt", "Baltoy", "Claydol", "Lileep", "Cradily", "Anorith", "Armaldo", "Feebas", "Milotic", "Castform", "Kecleon", "Shuppet", "Banette", "Duskull", "Dusclops", "Tropius", "Chimecho", "Absol", "Wynaut", "Snorunt", "Glalie", "Spheal", "Sealeo", "Walrein", "Clamperl", "Huntail", "Gorebyss", "Relicanth", "Luvdisc", "Bagon", "Shelgon", "Salamence", "Beldum", "Metang", "Metagross", "Regirock", "Regice", "Registeel", "Latias", "Latios", "Kyogre", "Groudon", "Rayquaza", "Jirachi", "Deoxys", "Turtwig", "Grotle", "Torterra", "Chimchar", "Monferno", "Infernape", "Piplup", "Prinplup", "Empoleon", "Starly", "Staravia", "Staraptor", "Bidoof", "Bibarel", "Kricketot", "Kricketune", "Shinx", "Luxio", "Luxray", "Budew", "Roserade", "Cranidos", "Rampardos", "Shieldon", "Bastiodon", "Burmy", "Wormadam", "Mothim", "Combee", "Vespiquen", "Pachirisu", "Buizel", "Floatzel", "Cherubi", "Cherrim", "Shellos", "Gastrodon", "Ambipom", "Drifloon", "Drifblim", "Buneary", "Lopunny", "Mismagius", "Honchkrow", "Glameow", "Purugly", "Chingling", "Stunky", "Skuntank", "Bronzor", "Bronzong", "Bonsly", "mimejr", "Happiny", "Chatot", "Spiritomb", "Gible", "Gabite", "Garchomp", "Munchlax", "Riolu", "Lucario", "Hippopotas", "Hippowdon", "Skorupi", "Drapion", "Croagunk", "Toxicroak", "Carnivine", "Finneon", "Lumineon", "Mantyke", "Snover", "Abomasnow", "Weavile", "Magnezone", "Lickilicky", "Rhyperior", "Tangrowth", "Electivire", "Magmortar", "Togekiss", "Yanmega", "Leafeon", "Glaceon", "Gliscor", "Mamoswine", "PorygonZ", "Gallade", "Probopass", "Dusknoir", "Froslass", "Rotom", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Heatran", "Regigigas", "Giratina", "Cresselia", "Phione", "Manaphy", "Darkrai", "Shaymin", "Arceus", "Victini", "Snivy", "Servine", "Serperior", "Tepig", "Pignite", "Emboar", "Oshawott", "Dewott", "Samurott", "Patrat", "Watchog", "Lillipup", "Herdier", "Stoutland", "Purrloin", "Liepard", "Pansage", "Simisage", "Pansear", "Simisear", "Panpour", "Simipour", "Munna", "Musharna", "Pidove", "Tranquill", "Unfezant", "Blitzle", "Zebstrika", "Roggenrola", "Boldore", "Gigalith", "Woobat", "Swoobat", "Drilbur", "Excadrill", "Audino", "Timburr", "Gurdurr", "Conkeldurr", "Tympole", "Palpitoad", "Seismitoad", "Throh", "Sawk", "Sewaddle", "Swadloon", "Leavanny", "Venipede", "Whirlipede", "Scolipede", "Cottonee", "Whimsicott", "Petilil", "Lilligant", "Basculin", "Sandile", "Krokorok", "Krookodile", "Darumaka", "Darmanitan", "Maractus", "Dwebble", "Crustle", "Scraggy", "Scrafty", "Sigilyph", "Yamask", "Cofagrigus", "Tirtouga", "Carracosta", "Archen", "Archeops", "Trubbish", "Garbodor", "Zorua", "Zoroark", "Minccino", "Cinccino", "Gothita", "Gothorita", "Gothitelle", "Solosis", "Duosion", "Reuniclus", "Ducklett", "Swanna", "Vanillite", "Vanillish", "Vanilluxe", "Deerling", "Sawsbuck", "Emolga", "Karrablast", "Escavalier", "Foongus", "Amoonguss", "Frillish", "Jellicent", "Alomomola", "Joltik", "Galvantula", "Ferroseed", "Ferrothorn", "Klink", "Klang", "Klinklang", "Tynamo", "Eelektrik", "Eelektross", "Elgyem", "Beheeyem", "Litwick", "Lampent", "Chandelure", "Axew", "Fraxure", "Haxorus", "Cubchoo", "Beartic", "Cryogonal", "Shelmet", "Accelgor", "Stunfisk", "Mienfoo", "Mienshao", "Druddigon", "Golett", "Golurk", "Pawniard", "Bisharp", "Bouffalant", "Rufflet", "Braviary", "Vullaby", "Mandibuzz", "Heatmor", "Durant", "Deino", "Zweilous", "Hydreigon", "Larvesta", "Volcarona", "Cobalion", "Terrakion", "Virizion", "Tornadus", "Thundurus", "Reshiram", "Zekrom", "Landorus", "Kyurem", "Keldeo", "Meloetta", "Genesect", "Chespin", "Quilladin", "Chesnaught", "Fennekin", "Braixen", "Delphox", "Froakie", "Frogadier", "Greninja", "Bunnelby", "Diggersby", "Fletchling", "Fletchinder", "Talonflame", "Scatterbug", "Spewpa", "Vivillon", "Litleo", "Pyroar", "Flabebe", "Floette", "Florges", "Skiddo", "Gogoat", "Pancham", "Pangoro", "Furfrou", "Espurr", "Meowstic", "Honedge", "Doublade", "Aegislash", "Spritzee", "Aromatisse", "Swirlix", "Slurpuff", "Inkay", "Malamar", "Binacle", "Barbaracle", "Skrelp", "Dragalge", "Clauncher", "Clawitzer", "Helioptile", "Heliolisk", "Tyrunt", "Tyrantrum", "Amaura", "Aurorus", "Sylveon", "Hawlucha", "Dedenne", "Carbink", "Goomy", "Sliggoo", "Goodra", "Klefki", "Phantump", "Trevenant", "Pumpkaboo", "Gourgeist", "Bergmite", "Avalugg", "Noibat", "Noivern", "Xerneas", "Yveltal", "Zygarde", "Diancie", "Hoopa", "Volcanion", "Rowlet", "Dartrix", "Decidueye", "Litten", "Torracat", "Incineroar", "Popplio", "Brionne", "Primarina", "Pikipek", "Trumbeak", "Toucannon", "Yungoos", "Gumshoos", "Grubbin", "Charjabug", "Vikavolt", "Crabrawler", "Crabominable", "Oricorio", "Cutiefly", "Ribombee", "Rockruff", "Lycanroc", "Wishiwashi", "Mareanie", "Toxapex", "Mudbray", "Mudsdale", "Dewpider", "Araquanid", "Fomantis", "Lurantis", "Morelull", "Shiinotic", "Salandit", "Salazzle", "Stufful", "Bewear", "Bounsweet", "Steenee", "Tsareena", "Comfey", "Oranguru", "Passimian", "Wimpod", "Golisopod", "Sandygast", "Palossand", "Pyukumuku", "Type: Null", "Silvally", "Minior", "Komala", "Turtonator", "Togedemaru", "Mimikyu", "Bruxish", "Drampa", "Dhelmise", "Jangmo_o", "Hakamo_o", "Kommo_o", "Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini", "Cosmog", "Cosmoem", "Solgaleo", "Lunala", "Nihilego", "Buzzwole", "Pheromosa", "Xurkitree", "Celesteela", "Kartana", "Guzzlord", "Necrozma", "Magearna", "Marshadow", "Poipole", "Naganadel", "Stakataka", "Blacephalon", "Zeraora", "Meltan", "Melmetal", "Grookey", "Thwackey", "Rillaboom", "Scorbunny", "Raboot", "Cinderace", "Sobble", "Drizzile", "Inteleon", "Skwovet", "Greedent", "Rookidee", "Corvisquire", "Corviknight", "Blipbug", "Dottler", "Orbeetle", "Nickit", "Thievul", "Gossifleur", "Eldegoss", "Wooloo", "Dubwool", "Chewtle", "Drednaw", "Yamper", "Boltund", "Rolycoly", "Carkol", "Coalossal", "Applin", "Flapple", "Appletun", "Silicobra", "Sandaconda", "Cramorant", "Arrokuda", "Barraskewda", "Toxel", "Toxtricity", "Sizlipede", "Centiskorch", "Clobbopus", "Grapploct", "Sinistea", "Polteageist", "Hatenna", "Hattrem", "Hatterene", "Impidimp", "Morgrem", "Grimmsnarl", "Obstagoon", "Perrserker", "Cursola", "Sirfetch'd", "Mr. Rime", "Runerigus", "Milcery", "Alcremie", "Falinks", "Pincurchin", "Snom", "Frosmoth", "Stonjoruner", "Eiscue", "Indeedee", "Morpeko", "Cufant", "Copperajah", "Dracozolt", "Arctozolt", "Dracovish", "Arctovish", "Duraludon", "Dreepy", "Drakloak", "Dragapult", "Zacian", "Zamazenta", "Eternatus", "Kubfu", "Urshifu", "Zarude", "Regieleki", "Regidrago", "Glastrier", "Spectrier","Calyrex","Wyrdeer","Kleavor","Ursaluna","Basculegion","Sneasler","Overqwil","Enamorus","Sprigatito","Floragato","Meowscarada","Fuecoco","Crocalor","Skeledirge","Quaxly","Quaxwell","Quaquaval","Lechonk","Oinkologne","Tarountula","Spidops","Nymble","Lokix","Pawmi","Pawmo","Pawmot","Tandemaus","Maushold","Fidough","Dachsbun","Smoliv","Dolliv","Arboliva","Squawkabilly","Nacli","Naclstack","Garganacl","Charcadet","Armarouge","Ceruledge","Tadbulb","Bellibolt","Wattrel","Kilowattrel","Maschiff","Mabosstiff","Shroodle","Grafaiai","Bramblin","Brambleghast","Toedscool","Toedscruel","Klawf","Capsakid","Scovillain","Rellor","Rabsca","Flittle","Espathra","Tinkatink","Tinkatuff","Tinkaton","Wiglett","Wugtrio","Bombirdier","Finizen","Palafin","Varoom","Revavroom","Cyclizar","Orthworm","Glimmet","Glimmora","Greavard","Houndstone","Flamigo","Cetoddle","Cetitan","Veluza","Dondozo","Tatsugiri","Annihilape","Clodsire","Farigiraf","Dudunsparce","Kingambit","Great Tusk","Scream Tail","Brute Bonnet","Fluter Mane","Slither Wing","Sandy Shocks","Iron Treads","Iron Bundle","Iron Hands","Iron Jugulis","Iron Moth","Iron Thorns","Frigibax","Arctibax","Baxcalibur","Gimmighoul","Gholdengo","Wo-Chien","Chien-Pao","Ting-Lu","Chi-Yu","Roaring Moon","Iron Valiant","Koraidon","Miraidon","Walking Wake","Iron Leaves","Dipplin","Poltchageist","Sinistcha","Okidogi","Munkidogi","Fezandipiti","Ogerpon","Archaludon","Hydrapple","Gouging Fire","Raging Bolt","Iron Boulder","Iron Crown","Tetrapagos","Pecharunt"];
+
+var googleworks = false;
+
+var extras = new Array;
+var extrasDA = new Array;
+var extrasFA = new Array;
+</script>
+<script src="https://drive.google.com/uc?id=0B6KFWbW7R_pKTkNLbVA4Y3hSdjg"></script>
+
+<script>
+		function keyDown()
+		{
+			if (event.keyCode == 32)
+			{
+				if (!hayParametro("mute")&&((note[5].paused)||(note[5].currentTime > 0.013))) beep(5);
+				document.getElementById('random1').src =(myorigin + zeroFill(pick_random_used(),3)+'.png');
+				document.getElementById('random2').src =(myorigin + zeroFill(pick_random(),3)+'.png');
+				document.getElementById('random3').src =(myorigin + zeroFill(pick_random_unused(),3)+'.png');		
+			}
+			if (event.keyCode == 49)
+			{
+				document.getElementById('random1').src =('https://i.imgur.com/P7BNbII.png');
+			}
+			if (event.keyCode == 50)
+			{
+				document.getElementById('random2').src =('https://i.imgur.com/P7BNbII.png');
+			}
+			if (event.keyCode == 51)
+			{
+				document.getElementById('random3').src =('https://i.imgur.com/P7BNbII.png');
+			}
+
+		}
+		
+		function keyUp()
+		{
+			if (event.keyCode == 32)
+			{
+				beep(8);
+			}
+			if ((event.keyCode == 82)||(event.keyCode == 114)||(event.keyCode == 48)||(event.keyCode == 27))
+			{
+				beep(5);
+				document.getElementById('random1').src =('https://i.imgur.com/P7BNbII.png');
+				document.getElementById('random2').src =('https://i.imgur.com/P7BNbII.png');
+				document.getElementById('random3').src =('https://i.imgur.com/P7BNbII.png');		
+			}
+			if (event.keyCode == 49)
+			{
+				beep(5);
+				document.getElementById('random1').src =(myorigin + zeroFill(pick_random_used(),3)+'.png');	
+			}
+			if (event.keyCode == 50)
+			{
+				beep(5);
+				document.getElementById('random2').src =(myorigin + zeroFill(pick_random(),3)+'.png');	
+			}
+			if (event.keyCode == 51)
+			{
+				beep(5);
+				document.getElementById('random3').src =(myorigin + zeroFill(pick_random_unused(),3)+'.png');		
+			}
+
+		}
+</script>
+
+<audio id="a1" src="https://elpatrixf.com/pokedex/random/sound/a1.ogg" type="audio/ogg"></audio>
+<audio id="a2" src="https://elpatrixf.com/pokedex/random/sound/a2.ogg" type="audio/ogg"></audio>
+<audio id="a3" src="https://elpatrixf.com/pokedex/random/sound/a3.ogg" type="audio/ogg"></audio>
+<audio id="a4" src="https://elpatrixf.com/pokedex/random/sound/a4.ogg" type="audio/ogg"></audio>
+<audio id="a5" src="https://elpatrixf.com/pokedex/random/sound/a5.ogg" type="audio/ogg"></audio>
+<audio id="a6" src="https://elpatrixf.com/pokedex/random/sound/a6.ogg" type="audio/ogg"></audio>
+<audio id="a7" src="https://elpatrixf.com/pokedex/random/sound/a7.ogg" type="audio/ogg"></audio>
+<audio id="a8" src="https://elpatrixf.com/pokedex/random/sound/a8.ogg" type="audio/ogg"></audio>
+<audio id="a9" src="https://elpatrixf.com/pokedex/random/sound/a9.ogg" type="audio/ogg"></audio>
+<audio id="a10" src="https://elpatrixf.com/pokedex/random/sound/a10.ogg" type="audio/ogg"></audio>
+<audio id="a11" src="https://elpatrixf.com/pokedex/random/sound/a11.ogg" type="audio/ogg"></audio>
+<audio id="a12" src="https://elpatrixf.com/pokedex/random/sound/a12.ogg" type="audio/ogg"></audio>
+<audio id="a13" src="https://elpatrixf.com/pokedex/random/sound/a13.ogg" type="audio/ogg"></audio>
+<audio id="a14" src="https://elpatrixf.com/pokedex/random/sound/a14.ogg" type="audio/ogg"></audio>
+<audio id="a15" src="https://elpatrixf.com/pokedex/random/sound/a15.ogg" type="audio/ogg"></audio>
+<audio id="a16" src="https://elpatrixf.com/pokedex/random/sound/a16.ogg" type="audio/ogg"></audio>
+<audio id="a17" src="https://elpatrixf.com/pokedex/random/sound/a17.ogg" type="audio/ogg"></audio>
+<audio id="a18" src="https://elpatrixf.com/pokedex/random/sound/a18.ogg" type="audio/ogg"></audio>
+<audio id="a19" src="https://elpatrixf.com/pokedex/random/sound/a19.ogg" type="audio/ogg"></audio>
+<audio id="a20" src="https://elpatrixf.com/pokedex/random/sound/a20.ogg" type="audio/ogg"></audio>
+<audio id="a21" src="https://elpatrixf.com/pokedex/random/sound/a21.ogg" type="audio/ogg"></audio>
+<audio id="a22" src="https://elpatrixf.com/pokedex/random/sound/a22.ogg" type="audio/ogg"></audio>
+<audio id="a23" src="https://elpatrixf.com/pokedex/random/sound/a23.ogg" type="audio/ogg"></audio>
+<audio id="a24" src="https://elpatrixf.com/pokedex/random/sound/a24.ogg" type="audio/ogg"></audio>
+<audio id="a25" src="https://elpatrixf.com/pokedex/random/sound/a25.ogg" type="audio/ogg"></audio>
+<audio id="a26" src="https://elpatrixf.com/pokedex/random/sound/a26.ogg" type="audio/ogg"></audio>
+<audio id="a27" src="https://elpatrixf.com/pokedex/random/sound/a27.ogg" type="audio/ogg"></audio>
+<audio id="a28" src="https://elpatrixf.com/pokedex/random/sound/a28.ogg" type="audio/ogg"></audio>
+<audio id="a29" src="https://elpatrixf.com/pokedex/random/sound/a29.ogg" type="audio/ogg"></audio>
+<audio id="a30" src="https://elpatrixf.com/pokedex/random/sound/a30.ogg" type="audio/ogg"></audio>
+<audio id="a31" src="https://elpatrixf.com/pokedex/random/sound/a31.ogg" type="audio/ogg"></audio>
+<audio id="a32" src="https://elpatrixf.com/pokedex/random/sound/a32.ogg" type="audio/ogg"></audio>
+
+<script type="text/javascript"> //Sound
+		
+		var too_fast = false;
+		var fast_timer;
+		var maxpoke = 1025;
+		
+		var note = [];
+		if (!hayParametro("mute")) for (i = 0; i<36; i++) note[i] = document.getElementById('a'+i);
+		var song_position = 0;
+		var song = [5,8,5,1,5,8,5,5,8,5,8,10,9,8,7,6,11,5,8,5,1,1,5,8,5,8,6,5,4,3,2,1,5+11,8+11,5+11,11+1,11+5,11+8,11+5,11+5,11+8,11+5,11+8,11+10,11+9,11+8,11+7,11+6,11+11,11+5,11+8,11+5,11+1,11+1,11+5,11+8,11+5,11+8,25,26,27,28,29,30,31,32];
+		function beep(n)
+		{
+			if (note[n] != null)
+			{
+				note[n].pause();
+            	note[n].currentTime = 0;
+            	note[n].play();
+            }
+		}
+		function dobeep()
+		{
+		beep(song[song_position]);
+		song_position++;
+
+		if ((too_fast)&&(song_position<10)&&(song_position>0))
+		{
+		song_position-=2
+		if (song_position <0) song_position = 0;
+		too_fast = false;
+		clearTimeout(fast_timer);
+		}
+		else
+		{
+		too_fast = true
+		fast_timer = setTimeout(function(){too_fast=false;},350);
+		}
+		
+		if (song_position >= song.length) song_position=0;
+		}
+		
+		function doboop(){dobeep()}
+		
+	    function pick_random_unused()
+		{
+			do picked = Math.floor((Math.random() * maxpoke) + 1); while (pokemon_list.substring(picked-1, picked) != 0);
+			return picked
+		}
+		function pick_random_used()
+		{
+			do picked = Math.floor((Math.random() * maxpoke) + 1); while (pokemon_list.substring(picked-1, picked) == 0);
+			return picked
+		}
+		function pick_random()
+		{
+			return Math.floor((Math.random() * maxpoke) + 1)
+		}
+</script>
+
+<div class="random_selectors" align="center">
+	<table border="0" width="930" height="100%" cellspacing="0" cellpadding="0">
+		<tr>
+			<td>
+			<p align="center">
+<!--	<a href="#"><img id="random1" src="https://i.imgur.com/P7BNbII.png" draggable="false" onmouseover="song_position=0;" onmousedown="dobeep();this.src =('https://i.imgur.com/P7BNbII.png');" onmouseup="doboop();this.src =(myorigin+ pick_random_used()+'.png');"></a></td>-->
+	<a href="#"><img id="random3" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=256px onmouseover="song_position=0;" onmousedown="dobeep();this.src =('https://i.imgur.com/P7BNbII.png');" onmouseup="doboop();this.src =(myorigin+ zeroFill(pick_random_unused(),3)+'.png');"></a>
+			<td>
+			<p align="center"> 
+	<a href="#"><img id="random2" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=256px onmouseover="song_position=0;" onmousedown="dobeep();this.src =('https://i.imgur.com/P7BNbII.png');" onmouseup="doboop();this.src =(myorigin+ zeroFill(pick_random(),3)+'.png');"></a></td>
+			<td>
+			<p align="center"> 
+	<a href="#"><img id="random1" src="https://i.imgur.com/P7BNbII.png" draggable="false" width=256px onmouseover="song_position=0;" onmousedown="dobeep();this.src =('https://i.imgur.com/P7BNbII.png');" onmouseup="doboop();this.src =(myorigin+ zeroFill(pick_random_used(),3)+'.png');"></a></td>
+<!--	<a href="#"><img id="random3" src="https://i.imgur.com/P7BNbII.png" draggable="false" onmouseover="song_position=0;" onmousedown="dobeep();this.src =('https://i.imgur.com/P7BNbII.png');" onmouseup="doboop();this.src =(myorigin+ pick_random_unused()+'.png');"></a>-->
+	
+	<div id="capa1" style="position: absolute; width: 256px; z-index: 1; left: 10px; bottom:10px" id="capa1">
+				[<a href="#" onclick="document.getElementById('capa1').style.display = 'none'">hide</a>]<p>&nbsp;</p>
+<!--			<script>if (typeof InstallTrigger !== 'undefined'){document.write("<p><b>Ah, sorry, this page will not work in Firefox ...for some reason ^^;<br>Try it out in Chrome instead.</b></p><p>&nbsp;</p>");}</script>				
+				<script>if (/*@cc_on!@*/false || !!document.documentMode) {document.write("<p><b>Ah, sorry, this page will not work in Internet Explorer.<br>Try it out in Chrome instead.</b></p><p>&nbsp;</p>");} </script>-->
+				<p><b>Click on the center pokeball to pick a random pokemon (Any one, from Bulbasaur (#001) to Pecharunt (#1025)).</b></p>
+				<p>&nbsp;</p>
+				<script>if (!(googleworks)) document.write("<p>There was an error loading the data so it might be outdated.</p><p>&nbsp;</p>")</script>
+				<p>The right pokeball only picks pokemon I've already done. (Which are <a href="../pokedex"><script>document.write(pokemon_amount);</script></a>).</p>
+				<p>&nbsp;</p>
+				<p>The left pokeball only picks pokemon I haven't done yet (Which are <a href="../pokedex"><script>document.write(maxpoke-pokemon_amount);</script></a>).</p>
+				<p>&nbsp;</p>
+				<p>If you have trouble loading the images, go <a href="http://elpatrixf.com/pokedex">here</a> 
+				first.</p>
+				<p>&nbsp;</p>
+				<p>Also, sorry in advance for everything.</p>
+				<p>I am most definitely not a good person!!</p></div>
+			</td>
+		</tr>
+	</table>
+	</div>
+</body> 
