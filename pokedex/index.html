@@ -53,7 +53,7 @@ p
 }
 .doodle
 {
-	opacity: 0.5;
+	opacity: 0.3;
 	filter: grayscale(1);
 }
 </style>
@@ -237,7 +237,7 @@ for (i = 1; i<=1025; i++)
  		}
  		else 																	document.write("<img src=\""+zeroFill(ss,3)+".png\" width=128");
 
-		if (pokemon_list.substring(i-1, i) == 0)  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\" style=\"opacity:0.1\"></a>");}
+		if (pokemon_list.substring(i-1, i) == 0)  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\" style=\"filter:contrast(0);opacity:0.25\"></a>");}
 		else if (pokemon_list.substring(i-1, i) == 2)  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\" class=\"doodle\"></a>");}
 		else									  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\"></a>");count++;}
 	}
@@ -272,7 +272,7 @@ for (i = 1; i<=1025; i++)
 }
 document.write(". A grand total of "+pkecount+" (*Of which at least "+pkedoodles+" are doodles).</p>");
 document.write("<p>If I drew a pokemon and it's not showing up on this list (Or it should be considered a doodle instead of full art), let me know and I'll fix it. (@<a href=\"https://twitter.com/elpatrixf\">elpatrixf</a> on twitter)</p>");
-//if (pkecount-pkedoodles!=count) document.write("<p>This number is different from the one at the top of the page for some reason... I will have to thoroughly check all my art some day💦</p>");
+//if (pkecount-pkedoodles!=count) document.write("<p>This number is different from the one at the top of the page for some reason... I will have to thoroughly check all my art some day??</p>");
 document.write("</div>");
 
 
