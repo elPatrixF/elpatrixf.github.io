@@ -179,6 +179,7 @@ var ss = "";
 var count = 0;
 var shiny = false;
 var vee = false;
+var reverse_results = hayParametro("invert")?1:0;
 
 for (i = 1; i<=1025; i++)
 {
@@ -237,7 +238,7 @@ for (i = 1; i<=1025; i++)
  		}
  		else 																	document.write("<img src=\""+zeroFill(ss,3)+".png\" width=128");
 
-		if (pokemon_list.substring(i-1, i) == 0)  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\" style=\"filter:contrast(0);opacity:0.25\"></a>");}
+		if (pokemon_list.substring(i-1, i) == reverse_results)  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\" style=\"filter:contrast(0);opacity:0.25\"></a>");}
 		else if (pokemon_list.substring(i-1, i) == 2)  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\" class=\"doodle\"></a>");}
 		else									  	{document.write("\" title=\"#"+i+": "+pokemon_names[i]+"\"></a>");count++;}
 	}
